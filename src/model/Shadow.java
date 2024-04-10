@@ -1,10 +1,10 @@
 package model;
 
-import java.util.*;
-
-//use a set to keep track of letters that have been used
-
-
 public class Shadow{
+    //boolean property bound to disable and visible
+    //array of character lists
+    //set of 
 
+    //integer property(?) for each character bound to colors for "not in word", "in word, incorrect position", "correct"
+    //
 }
