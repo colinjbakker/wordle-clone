@@ -1,15 +1,20 @@
 package model;
 
+import java.util.ArrayList;
+
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+
 //Data representation of the GUI, no logic
 
 public class Model {
     private final SimpleStringProperty guess = new SimpleStringProperty("");
     private final SimpleStringProperty solution = new SimpleStringProperty("hello");
     private final SimpleIntegerProperty guessCount = new SimpleIntegerProperty(0);
-    private final SimpleBooleanProperty win = new SimpleBooleanProperty(false);
+    private final SimpleBooleanProperty universalDisable = new SimpleBooleanProperty(false);
+
+    private final Shadow guessList = new Shadow();
 
     public String getGuess(){
         return guess.get();
@@ -51,15 +56,31 @@ public class Model {
         guessCount.set(getGuessCount() + 1);
     }
 
-    public Boolean getWin(){
-        return win.getValue();
+    public Boolean getGameDisable(){
+        return universalDisable.getValue();
     }
 
-    public SimpleBooleanProperty winProperty(){
-        return win;
+    public SimpleBooleanProperty gameDisableProperty(){
+        return universalDisable;
     }
 
-    public void playerWin(){
-        win.setValue(true);
+    public void swapGameDisable(){
+        universalDisable.setValue(!universalDisable.getValue());
+    }
+
+    public String getListString(int index){
+        return guessList.getString(index);
+    }
+
+    public Guess getListGuess(int index){
+        return guessList.getGuess(index);
+    }
+
+    public Boolean getListBoolean(int index){
+        return guessList.getBoolean(index);
+    }
+
+    public ArrayList<Guess> getGuessList(){
+        return guessList.getList();
     }
 }

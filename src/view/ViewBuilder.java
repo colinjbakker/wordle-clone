@@ -3,6 +3,7 @@ package view;
 import model.Model;
 
 import javafx.util.Builder;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -38,31 +39,28 @@ public class ViewBuilder implements Builder<Region>{
     }
 
     private Node createCenter(){
-        VBox center = new VBox(6, guessBox());
-        center.setPadding(new Insets(20));
-        return center;
+        VBox vbox = new VBox(6);
+        for(int i = 0; i < 6; i++){
+            vbox.getChildren().add(boundTextField(model.getListGuess(i).getTextProperty(), model.getListGuess(i).getEnableProperty()));
+        }
+        vbox.setPadding(new Insets(20));
+        return vbox;
     }
 
     private Node createBottom(){
         Button submit = new Button("Guess");
         submit.setDefaultButton(true);
+        submit.disableProperty().bind(model.gameDisableProperty());
         submit.setOnAction(evt -> submitHandler.run());
         HBox bottom = new HBox(10, submit);
         bottom.setAlignment(Pos.CENTER_RIGHT);
         return bottom;
     }
 
-    private Node guessBox(){
-        return new HBox(6, promptLabel("Guess: "), boundTextField(model.guessProperty()));
-    }
-
-    private Node promptLabel(String content){
-        return new Label(content);
-    }
-
-    private Node boundTextField(StringProperty boundProperty){
+    private Node boundTextField(StringProperty boundProperty, BooleanProperty booleanProperty){
         TextField textField = new TextField();
         textField.textProperty().bindBidirectional(boundProperty);
+        textField.disableProperty().bind(booleanProperty);
         return textField;
     }
 }
