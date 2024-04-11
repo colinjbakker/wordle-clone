@@ -1,7 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -26,7 +24,7 @@ public class Model {
     public void setInputCount(int inputCount){
         this.inputCount.set(inputCount);
     }
-    
+
     public SimpleBooleanProperty getTest(){
         return test;
     }

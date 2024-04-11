@@ -5,12 +5,12 @@ import model.Model;
 import javafx.util.Builder;
 
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -39,14 +39,21 @@ public class ViewBuilder implements Builder<Region>{
     public Region build(){
         BorderPane page = new BorderPane();
         page.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
-        page.setTop(headingLabel("Wordle"));
+        page.setTop(headingLabel("WORDLE"));
         page.setCenter(new Group(createInput(),createOverlay()));
         page.setBottom(createBottom());
         return page;
     }
 
     private Node headingLabel(String content){
-        return new Label(content);
+        HBox hbox = new HBox();
+        Label label = new Label(content);
+        label.setTextFill(Color.WHITE);
+        label.setStyle("-fx-font-size: 30.0;");
+        hbox.getChildren().add(label);
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setPadding(new Insets(15));
+        return hbox;
     }
 
     private Node createOverlay(){
@@ -56,7 +63,7 @@ public class ViewBuilder implements Builder<Region>{
         for(int i = 0; i < 6; i++){
             hboxArray[i] = new HBox(6);
             for(int j = 0; j < 5; j++){
-                hboxArray[i].getChildren().add(createLabel(model.guessAt(i).letterAt(j).getLetterStringProperty(), model.guessAt(i).letterAt(j).getLetterCorrect(), model.guessAt(i).letterAt(j).getLetterInSolution()));
+                hboxArray[i].getChildren().add(createLabel(model.guessAt(i).letterAt(j).getLetterStringProperty(), model.guessAt(i).getDisableProperty(), model.guessAt(i).letterAt(j).getLetterCorrect(), model.guessAt(i).letterAt(j).getLetterInSolution()));
             }
         }
         vbox.getChildren().addAll(hboxArray);
@@ -71,16 +78,14 @@ public class ViewBuilder implements Builder<Region>{
         return vbox;
     }
 
-    private Node createLabel(StringProperty stringProperty, BooleanProperty correctProperty, BooleanProperty inSolutionProperty){
+    private Node createLabel(StringProperty stringProperty, BooleanProperty disableProperty, BooleanProperty correctProperty, BooleanProperty inSolutionProperty){
         Label label = new Label();
         label.textProperty().bind(stringProperty);
         label.setPrefSize(80, 80);
         label.setAlignment(Pos.CENTER);
-        label.setFont(new Font(30.0));
         label.setTextFill(Color.WHITE);
-        label.setStyle("-fx-border-style: solid;" 
-        + "-fx-border-width: 5;" 
-        + "-fx-border-color: gray;");
+        String style = "-fx-font-size: 30.0;" + "-fx-border-style: solid;" + "-fx-border-width: 5;";
+        label.styleProperty().bind(Bindings.when(disableProperty).then(style + "-fx-border-color: gray;").otherwise(style + "-fx-border-color: white;"));
         label.backgroundProperty().bind(Bindings.when(correctProperty)
                                             .then(new Background(new BackgroundFill(Color.GREEN, null, null))).otherwise(Bindings.when(inSolutionProperty)
                                             .then(new Background(new BackgroundFill(Color.GOLD, null, null))).otherwise(new Background(new BackgroundFill(Color.BLACK, null, null)))));

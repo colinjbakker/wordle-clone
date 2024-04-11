@@ -10,9 +10,12 @@ import javafx.stage.Stage;
 //Includes only the controller
  
 public class App extends Application {
-    @Override
+	@Override
     public void start(Stage primaryStage) {
-		primaryStage.setScene(new Scene(new Controller().getView(), 500, 600));
+		Controller controller = new Controller();
+		controller.prepWordFile("resources/sgb-words.txt");
+		Scene scene = new Scene(controller.getView(), 500, 620);
+		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 }

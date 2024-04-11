@@ -1,7 +1,7 @@
 package controller;
 
 import interactor.Interactor;
-import model.Model;
+import model.*;
 import view.ViewBuilder;
 
 import javafx.util.Builder;
@@ -16,8 +16,13 @@ public class Controller{
 
 	public Controller() {
 		Model model = new Model();
-		interactor = new Interactor(model);
+		FileIO fileio = new FileIO();
+		interactor = new Interactor(model, fileio);
 		viewBuilder = new ViewBuilder(model, interactor::submitGuess, interactor::changeHandler);
+	}
+
+	public void prepWordFile(String fileName){
+		interactor.prepWordFile(fileName);
 	}
 
 	public Region getView() {

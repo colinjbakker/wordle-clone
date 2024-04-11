@@ -2,9 +2,6 @@ package model;
 
 import java.util.ArrayList;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-
 public class Shadow{
     private final ArrayList<Guess> ShadowList = new ArrayList<Guess>(6);
 
