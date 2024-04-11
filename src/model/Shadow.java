@@ -6,43 +6,19 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Shadow{
-    //boolean property bound to disable and visible
-    //array of character lists
-    //set of 
-
-    //integer property(?) for each character bound to colors for "not in word", "in word, incorrect position", "correct"
-    //
     private final ArrayList<Guess> ShadowList = new ArrayList<Guess>(6);
 
 
     public Shadow() {
-        ShadowList.add(new Guess("", false));
-        for(int i = 1; i < 6; i++){
-            ShadowList.add(new Guess("", true));
+        //adds 6 guesses to the array
+        for(int i = 0; i < 6; i++){
+            ShadowList.add(new Guess());
         }
+        //enables the first letter
+        ShadowList.get(0).flipDisable();
     }
 
-    public String getString(int index){
-        return ShadowList.get(index).getText();
-    }
-
-    public SimpleStringProperty getTextProperty(int index){
-        return ShadowList.get(index).getTextProperty();
-    }
-
-    public Guess getGuess(int index){
+    public Guess guessAt(int index){
         return ShadowList.get(index);
-    }
-
-    public SimpleBooleanProperty getEnableProperty(int index){
-        return ShadowList.get(index).getEnableProperty();
-    }
-
-    public Boolean getBoolean(int index){
-        return ShadowList.get(index).getEnable();
-    }
-
-    public ArrayList<Guess> getList(){
-        return ShadowList;
     }
 }

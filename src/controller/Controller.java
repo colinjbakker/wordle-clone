@@ -17,7 +17,7 @@ public class Controller{
 	public Controller() {
 		Model model = new Model();
 		interactor = new Interactor(model);
-		viewBuilder = new ViewBuilder(model, interactor::submitGuess);
+		viewBuilder = new ViewBuilder(model, interactor::submitGuess, interactor::changeHandler);
 	}
 
 	public Region getView() {

@@ -13,9 +13,23 @@ public class Model {
     private final SimpleStringProperty solution = new SimpleStringProperty("hello");
     private final SimpleIntegerProperty guessCount = new SimpleIntegerProperty(0);
     private final SimpleBooleanProperty universalDisable = new SimpleBooleanProperty(false);
+    private final SimpleIntegerProperty inputCount = new SimpleIntegerProperty(0);
+
+    private final SimpleBooleanProperty test = new SimpleBooleanProperty(true);
 
     private final Shadow guessList = new Shadow();
 
+    public int getInputCount(){
+        return inputCount.get();
+    }
+
+    public void setInputCount(int inputCount){
+        this.inputCount.set(inputCount);
+    }
+    
+    public SimpleBooleanProperty getTest(){
+        return test;
+    }
     public String getGuess(){
         return guess.get();
     }
@@ -68,19 +82,8 @@ public class Model {
         universalDisable.setValue(!universalDisable.getValue());
     }
 
-    public String getListString(int index){
-        return guessList.getString(index);
+    public Guess guessAt(int index){
+        return guessList.guessAt(index);
     }
 
-    public Guess getListGuess(int index){
-        return guessList.getGuess(index);
-    }
-
-    public Boolean getListBoolean(int index){
-        return guessList.getBoolean(index);
-    }
-
-    public ArrayList<Guess> getGuessList(){
-        return guessList.getList();
-    }
 }
