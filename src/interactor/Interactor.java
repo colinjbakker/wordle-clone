@@ -2,8 +2,6 @@ package interactor;
 
 import model.Model;
 
-//Will connect to any external database probably not necessary might remove
-
 public class Interactor {
     private Model model;
 
@@ -12,29 +10,30 @@ public class Interactor {
     }
 
     public void submitGuess(){
-        System.out.println(model.getListString(model.getGuessCount())+ " " + model.getGuessCount());
-
-        if(checkWin()){
-            model.swapGameDisable();
-            System.out.println("WIN");
-            model.getListGuess(model.getGuessCount()).swapEnable();
-        }else if(model.getGuessCount() != model.getGuessList().size()-1){
-            System.out.println("INCORRECT");
-            incrementEnable();
-            model.incrementGuessCount();
-        } else{
-            System.out.println("LOSE");
-            model.swapGameDisable();
-            model.getListGuess(model.getGuessCount()).swapEnable();
+        int gc = model.getGuessCount();
+        String guess = model.getListString(gc);
+        System.out.println(guess + " " + gc);
+        
+        if(guess.length() != 5){
+            System.out.println("INCORRECT LENGTH");
         }
+        else if(checkWin() || (gc == model.getGuessList().size()-1)){
+            System.out.println("GAME END");
+            model.swapGameDisable();
+            model.getListGuess(gc).swapEnable();
+        }else{
+            System.out.println("GAME CONTINUE");
+            increment();
+        } 
     }
 
-    public boolean checkWin(){
-        return model.getListString(model.getGuessCount()).equals(model.getSolution());
+    private boolean checkWin(){
+        return model.getListString(model.getGuessCount()).equals(model.getSolution().toUpperCase());
     }
 
-    public void incrementEnable(){
+    private void increment(){
         model.getListGuess(model.getGuessCount()).swapEnable();
         model.getListGuess(model.getGuessCount()+1).swapEnable();
+        model.incrementGuessCount();
     }
 }

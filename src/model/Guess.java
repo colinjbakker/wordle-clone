@@ -1,12 +1,13 @@
 package model;
 
+
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Guess {
     private final SimpleStringProperty text = new SimpleStringProperty("");
     private final SimpleBooleanProperty enable = new SimpleBooleanProperty(true);
-
+    
     public Guess(String string, Boolean bool){
         text.set(string);
         enable.set(bool);
@@ -33,5 +34,12 @@ public class Guess {
 
     public void swapEnable(){
         enable.set(!enable.get());
+    }
+
+    public String getLetter(int index){
+        if(index > text.get().length()){
+            return "";
+        }
+        return text.get().substring(index, index+1);
     }
 }

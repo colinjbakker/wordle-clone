@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
-		primaryStage.setScene(new Scene(new Controller().getView()));
+		primaryStage.setScene(new Scene(new Controller().getView(), 500, 600));
 		primaryStage.show();
 	}
 }

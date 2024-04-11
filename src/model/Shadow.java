@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Shadow{
@@ -25,8 +26,16 @@ public class Shadow{
         return ShadowList.get(index).getText();
     }
 
+    public SimpleStringProperty getTextProperty(int index){
+        return ShadowList.get(index).getTextProperty();
+    }
+
     public Guess getGuess(int index){
         return ShadowList.get(index);
+    }
+
+    public SimpleBooleanProperty getEnableProperty(int index){
+        return ShadowList.get(index).getEnableProperty();
     }
 
     public Boolean getBoolean(int index){
