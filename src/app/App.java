@@ -12,10 +12,14 @@ import javafx.stage.Stage;
 public class App extends Application {
 	@Override
     public void start(Stage primaryStage) {
+		
+
 		Controller controller = new Controller();
 		controller.prepWordFile("resources/sgb-words.txt");
-		Scene scene = new Scene(controller.getView(), 500, 620);
+		Scene scene = new Scene(controller.getView());
 		primaryStage.setScene(scene);
+		primaryStage.setMinHeight(680);
+		primaryStage.setMinWidth(500);
 		primaryStage.show();
 	}
 }

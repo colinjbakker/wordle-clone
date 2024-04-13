@@ -12,9 +12,7 @@ public class Model {
     private final SimpleIntegerProperty guessCount = new SimpleIntegerProperty(0);
     private final SimpleBooleanProperty universalDisable = new SimpleBooleanProperty(false);
     private final SimpleIntegerProperty inputCount = new SimpleIntegerProperty(0);
-
-    private final SimpleBooleanProperty test = new SimpleBooleanProperty(true);
-
+    private final SimpleStringProperty warning = new SimpleStringProperty("");
     private final Shadow guessList = new Shadow();
 
     public int getInputCount(){
@@ -25,9 +23,6 @@ public class Model {
         this.inputCount.set(inputCount);
     }
 
-    public SimpleBooleanProperty getTest(){
-        return test;
-    }
     public String getGuess(){
         return guess.get();
     }
@@ -82,6 +77,26 @@ public class Model {
 
     public Guess guessAt(int index){
         return guessList.guessAt(index);
+    }
+
+    public String getWarningString(){
+        return warning.get();
+    }
+    
+    public SimpleStringProperty getWarningProperty(){
+        return warning;
+    }
+
+    public void setWarning(int type){
+        if(type == 0){
+            warning.set("Not in word list");
+        } else if(type == 1){
+            System.out.println("test2");
+            warning.set("Not enough letters");
+        } else{
+            System.out.println("test3");
+            warning.set("");
+        }
     }
 
 }

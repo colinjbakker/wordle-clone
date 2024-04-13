@@ -8,6 +8,7 @@ public class Letter {
     private final SimpleBooleanProperty letterDisable = new SimpleBooleanProperty(false); //bind to input disableproperty
     private final SimpleBooleanProperty letterCorrect = new SimpleBooleanProperty(false); //bind to bg color      if(lettercorrect) : green, elif(letterinsolution) : yellow, else : color gray
     private final SimpleBooleanProperty letterInSolution = new SimpleBooleanProperty(false); //bind to bg color
+    private final SimpleBooleanProperty letterUnsubmitted = new SimpleBooleanProperty(true);
 
     public Letter(String letter, Boolean disable, Boolean correct, Boolean inSolution){
         letterString.set(letter);
@@ -67,6 +68,18 @@ public class Letter {
 
     public void flipLetterInSolution(){
         letterInSolution.set(true);
+    }
+
+    public SimpleBooleanProperty getLetterUnsubmitted(){
+        return letterUnsubmitted;
+    }
+
+    public Boolean getLetterUnsubmittedBoolean(){
+        return letterUnsubmitted.get();
+    }
+
+    public void flipLetterUnsubmitted(){
+        letterUnsubmitted.set(false);
     }
 }
 
