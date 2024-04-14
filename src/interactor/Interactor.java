@@ -1,6 +1,7 @@
 package interactor;
 
 import model.Model;
+
 import model.FileIO;
 
 public class Interactor {
@@ -24,11 +25,11 @@ public class Interactor {
         model.guessAt(model.getGuessCount()).createLetterArray();
         if(checkValid(guess)){
             if(checkWin(guess) || (gc == 5)){
-                setFlags();
+                setBoardFlags();
                 model.swapGameDisable();
                 model.guessAt(gc).flipDisable();
             } else{
-                setFlags();
+                setBoardFlags();
                 increment();
             }
         }
@@ -54,22 +55,44 @@ public class Interactor {
         return true;
     }
 
-    private void setFlags(){
+    private int getKeyIndex(String letter){
+        String[] qwerty = {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F", "G", "H", "J", "K", "L", "Z", "X", "C", "V", "B", "N", "M"};
+        int index = -1;
+        for(int i = 0; i < qwerty.length; i++){
+            if(qwerty[i].equals(letter)){
+                index = i;
+            }
+        }
+        return index;
+    }
+
+    private void setBoardFlags(){
         String guess = model.guessAt(model.getGuessCount()).getGuessString();
         String solution = model.getSolution().toUpperCase();
         int guessLetterCount;
         int solutionLetterCount;
         boolean foundFlag;
+        int keyIndex = 0;
         for(int i = 0; i < 5; i++){
+            keyIndex = getKeyIndex(guess.substring(i, i+1));
             if(solution.contains(guess.substring(i, i+1))){
                 if(guess.substring(i, i+1).equals(solution.substring(i, i+1))){
                     //correct guess
                     model.guessAt(model.getGuessCount()).letterAt(i).makeGreen();
+                    if(keyIndex >= 0){
+                        model.getShadow().keyAt(keyIndex).makeGreen(); 
+                    }
                 } else {
                     //give info about number of letter appearances in word
                     guessLetterCount = 0;
                     solutionLetterCount = 0; 
                     foundFlag = false;
+
+                    if(!model.getShadow().keyAt(keyIndex).getGreen().get()){
+                        if(keyIndex >= 0){
+                            model.getShadow().keyAt(keyIndex).makeYellow(); 
+                        }
+                    }
 
                     for(int j = 0; j < 5; j++){
                         if(j < i){
@@ -97,6 +120,9 @@ public class Interactor {
             } else {
                 //incorrect guess
                 model.guessAt(model.getGuessCount()).letterAt(i).makeGray();
+                if(keyIndex >= 0){
+                    model.getShadow().keyAt(keyIndex).makeGray(); 
+                }
             }
         }
     }

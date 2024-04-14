@@ -124,11 +124,11 @@ public class ViewBuilder{
         label.setPrefSize(80, 80);
         label.setAlignment(Pos.CENTER);
         String style = "-fx-text-fill: white;" + "-fx-font-family: serif;"+"-fx-font-size: 35.0;" + "-fx-font-weight: bold;" + "-fx-border-style: solid;" + "-fx-border-width: 3;";
-        label.styleProperty().bind(Bindings.when(disableProperty).then(style + "-fx-border-color: rgb(57, 57, 57);").otherwise(style + "-fx-border-color: white;"));
+        label.styleProperty().bind(Bindings.when(disableProperty).then(style + "-fx-border-color: rgb(65, 65, 65);").otherwise(style + "-fx-border-color: white;"));
         label.backgroundProperty().bind(
             Bindings.when(green).then(new Background(new BackgroundFill(Color.GREEN, null, null))).otherwise(
                 Bindings.when(yellow).then(new Background(new BackgroundFill(Color.rgb(219, 161, 0), null, null))).otherwise(
-                    Bindings.when(gray).then(new Background(new BackgroundFill(Color.rgb(57, 57, 57), null, null))).otherwise(
+                    Bindings.when(gray).then(new Background(new BackgroundFill(Color.rgb(65, 65, 65), null, null))).otherwise(
                         new Background(new BackgroundFill(Color.BLACK, null, null))
                     )
                 )
@@ -164,16 +164,53 @@ public class ViewBuilder{
     //-------------BOTTOM---------------
     private Node createBottom(){
         VBox bottom = new VBox(10);
-        bottom.getChildren().add(createSubmit());
-        bottom.setAlignment(Pos.CENTER);
+        bottom.getChildren().addAll(createKeyboard(),createSubmit());
+        bottom.setAlignment(Pos.TOP_CENTER);
         return bottom;
     }
 
+    private Node createKeyboard(){
+        VBox vbox = new VBox(6);
+        HBox hbox1 = new HBox(6);
+        HBox hbox2 = new HBox(6);
+        HBox hbox3 = new HBox(6);
+        vbox.setAlignment(Pos.TOP_CENTER);
+        hbox1.setAlignment(Pos.CENTER);
+        hbox2.setAlignment(Pos.CENTER);
+        hbox3.setAlignment(Pos.CENTER);
+        for(int i = 0; i < 26; i++){
+            Label label = new Label();
+            label.textProperty().bind(model.getShadow().keyAt(i).getLetterStringProperty());
+            label.setPrefSize(36, 36);
+            label.setAlignment(Pos.CENTER);
+            label.setStyle("-fx-text-fill: white;" + "-fx-font-family: serif;"+"-fx-font-size: 16.0;" + "-fx-font-weight: bold;" + "-fx-border-style: solid;" + "-fx-border-width: 3;"+ "-fx-border-color: rgb(65, 65, 65);");
+            label.backgroundProperty().bind(
+                Bindings.when(model.getShadow().keyAt(i).getGreen()).then(new Background(new BackgroundFill(Color.GREEN, null, null))).otherwise(
+                   Bindings.when(model.getShadow().keyAt(i).getYellow()).then(new Background(new BackgroundFill(Color.rgb(219, 161, 0), null, null))).otherwise(
+                        Bindings.when(model.getShadow().keyAt(i).getGray()).then(new Background(new BackgroundFill(Color.rgb(65, 65, 65), null, null))).otherwise(
+                            new Background(new BackgroundFill(Color.BLACK, null, null))
+                        )
+                    )
+                )
+            );
+            if(i < 10){
+                hbox1.getChildren().add(label);
+            }else if(i < 19){
+                hbox2.getChildren().add(label);
+            } else{
+                hbox3.getChildren().add(label);
+            }
+        }
+        vbox.getChildren().addAll(hbox1, hbox2, hbox3);
+        return vbox;
+    }
+
     private Node createSubmit(){
-        Button submit = new Button("Enter");
+        Button submit = new Button("ENTER");
         submit.setDefaultButton(true);
         submit.disableProperty().bind(model.gameDisableProperty());
         submit.setOnAction(e -> submitHandler.run());
+        submit.setStyle("-fx-font-family: serif;" +"-fx-font-size: 16.0;" + "-fx-font-weight: bold;" + "-fx-border-style: solid;" + "-fx-border-width: 3;"+"-fx-border-color: rgb(65, 65, 65);"+"-fx-text-fill: white;" + "-fx-background-color: black;");
         return submit;
     }    
 }

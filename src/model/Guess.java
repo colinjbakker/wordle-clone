@@ -7,13 +7,15 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Guess {
-    private final ArrayList<Letter> letterArray = new ArrayList<Letter>();
-    private final SimpleStringProperty guessString = new SimpleStringProperty("");
-    private final SimpleBooleanProperty disableProperty = new SimpleBooleanProperty(true);
+    private final ArrayList<Letter> letterArray = new ArrayList<Letter>(5);
+    private final SimpleStringProperty guessString = new SimpleStringProperty();
+    private final SimpleBooleanProperty disableProperty = new SimpleBooleanProperty();
 
     public Guess(){
+        guessString.set("");
+        disableProperty.set(true);
         for(int i = 0; i < 5; i++){
-            letterArray.add(new Letter());
+            letterArray.add(new Letter(" "));
         }
     }
 

@@ -75,6 +75,10 @@ public class Model {
         universalDisable.setValue(!universalDisable.getValue());
     }
 
+    public Shadow getShadow(){
+        return guessList;
+    }
+
     public Guess guessAt(int index){
         return guessList.guessAt(index);
     }

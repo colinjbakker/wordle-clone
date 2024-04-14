@@ -4,11 +4,19 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Letter {
-    private final SimpleStringProperty letterString = new SimpleStringProperty(" "); //bind to input textproperty
-    private final SimpleBooleanProperty letterDisable = new SimpleBooleanProperty(true); //bind to input disableproperty
-    private final SimpleBooleanProperty green = new SimpleBooleanProperty(false); //bind to bg color      if(lettercorrect) : green, elif(letterinsolution) : yellow, else : color gray
-    private final SimpleBooleanProperty yellow = new SimpleBooleanProperty(false); //bind to bg color
-    private final SimpleBooleanProperty gray = new SimpleBooleanProperty(false);
+    private final SimpleStringProperty letterString = new SimpleStringProperty(); //bind to input textproperty
+    private final SimpleBooleanProperty letterDisable = new SimpleBooleanProperty(); //bind to input disableproperty
+    private final SimpleBooleanProperty green = new SimpleBooleanProperty(); //bind to bg color      if(lettercorrect) : green, elif(letterinsolution) : yellow, else : color gray
+    private final SimpleBooleanProperty yellow = new SimpleBooleanProperty(); //bind to bg color
+    private final SimpleBooleanProperty gray = new SimpleBooleanProperty();
+
+    public Letter(String letterString){
+        this.letterString.set(letterString);
+        letterDisable.set(true);
+        green.set(false);
+        yellow.set(false);
+        gray.set(false);
+    }
 
     public SimpleStringProperty getLetterStringProperty(){
         //Get the actual letterString property
