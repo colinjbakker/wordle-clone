@@ -2,17 +2,17 @@ package view;
 
 import model.Model;
 
-import javafx.util.Builder;
-
 import javafx.scene.paint.Color;
 
+import javafx.util.Duration;
 import java.util.function.UnaryOperator;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -28,7 +28,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-public class ViewBuilder implements Builder<Region>{
+public class ViewBuilder{
     private final Model model;
     private final Runnable submitHandler;
     private final Runnable changeHandler;
@@ -39,7 +39,6 @@ public class ViewBuilder implements Builder<Region>{
         this.changeHandler = changeHandler;
     }
 
-    @Override
     public Region build(){
         BorderPane page = new BorderPane();
         page.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
@@ -49,12 +48,11 @@ public class ViewBuilder implements Builder<Region>{
         return page;
     }
 
-    //----------------TOP-----------------
+    //----------------TOP------------------
     private Node headingLabel(String content){
         HBox hbox = new HBox();
         Label label = new Label(content);
-        label.setTextFill(Color.WHITE);
-        label.setStyle("-fx-font-family: serif;"+"-fx-font-size: 50.0;" + "-fx-font-weight: bold;");
+        label.setStyle("-fx-text-fill: white;"+"-fx-font-family: serif;"+"-fx-font-size: 50.0;" + "-fx-font-weight: bold;");
         hbox.getChildren().add(label);
         hbox.setAlignment(Pos.CENTER);
         hbox.setPadding(new Insets(15));
@@ -97,13 +95,9 @@ public class ViewBuilder implements Builder<Region>{
         };
         TextFormatter<String> tf = new TextFormatter<>(filter);
         textField.setTextFormatter(tf);
-
-        textField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
-                textField.setText(textField.getText().toUpperCase());
-                changeHandler.run();
-            }
+        textField.textProperty().addListener((obs, oldVal, newVal) ->  {
+            textField.setText(textField.getText().toUpperCase());
+            changeHandler.run();
         });
 
         return textField;
@@ -117,33 +111,53 @@ public class ViewBuilder implements Builder<Region>{
             hboxArray[i] = new HBox(6);
             hboxArray[i].setAlignment(Pos.CENTER);
             for(int j = 0; j < 5; j++){
-                hboxArray[i].getChildren().add(createLabel(model.guessAt(i).letterAt(j).getLetterStringProperty(), model.guessAt(i).getDisableProperty(), model.guessAt(i).letterAt(j).getLetterCorrect(), model.guessAt(i).letterAt(j).getLetterInSolution(), model.guessAt(i).letterAt(j).getLetterUnsubmitted()));
+                hboxArray[i].getChildren().add(createLabel(model.guessAt(i).letterAt(j).getLetterStringProperty(), model.guessAt(i).getDisableProperty(), model.guessAt(i).letterAt(j).getGreen(), model.guessAt(i).letterAt(j).getYellow(), model.guessAt(i).letterAt(j).getGray()));
             }
         }
         vbox.getChildren().addAll(hboxArray);
         return vbox;
     }
 
-    private Node createLabel(StringProperty stringProperty, BooleanProperty disableProperty, BooleanProperty correctProperty, BooleanProperty inSolutionProperty, BooleanProperty letterUnsubmitted){
+    private Node createLabel(StringProperty stringProperty, BooleanProperty disableProperty, BooleanProperty green, BooleanProperty yellow, BooleanProperty gray){
         Label label = new Label();
         label.textProperty().bind(stringProperty);
         label.setPrefSize(80, 80);
         label.setAlignment(Pos.CENTER);
-        label.setTextFill(Color.WHITE);
-        String style = "-fx-font-family: serif;"+"-fx-font-size: 35.0;" + "-fx-font-weight: bold;" + "-fx-border-style: solid;" + "-fx-border-width: 3;";
+        String style = "-fx-text-fill: white;" + "-fx-font-family: serif;"+"-fx-font-size: 35.0;" + "-fx-font-weight: bold;" + "-fx-border-style: solid;" + "-fx-border-width: 3;";
         label.styleProperty().bind(Bindings.when(disableProperty).then(style + "-fx-border-color: rgb(57, 57, 57);").otherwise(style + "-fx-border-color: white;"));
-        label.backgroundProperty().bind(Bindings.when(letterUnsubmitted).then(new Background(new BackgroundFill(Color.BLACK, null, null))).otherwise(Bindings.when(correctProperty)
-                                            .then(new Background(new BackgroundFill(Color.GREEN, null, null))).otherwise(Bindings.when(inSolutionProperty)
-                                            .then(new Background(new BackgroundFill(Color.rgb(219, 161, 0), null, null))).otherwise(new Background(new BackgroundFill(Color.rgb(57, 57, 57), null, null))))));
+        label.backgroundProperty().bind(
+            Bindings.when(green).then(new Background(new BackgroundFill(Color.GREEN, null, null))).otherwise(
+                Bindings.when(yellow).then(new Background(new BackgroundFill(Color.rgb(219, 161, 0), null, null))).otherwise(
+                    Bindings.when(gray).then(new Background(new BackgroundFill(Color.rgb(57, 57, 57), null, null))).otherwise(
+                        new Background(new BackgroundFill(Color.BLACK, null, null))
+                    )
+                )
+            )
+        );
+
         return label;
     }
 
     private Node createWarnings(){
         Label warning = new Label();
-        warning.textProperty().bind(model.getWarningProperty());
-        warning.setTextFill(Color.BLACK);
-        warning.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
-        warning.setStyle("-fx-font-family: serif;"+"-fx-font-size: 15.0;" + "-fx-font-weight: bold;");
+        warning.setOpacity(0);
+        warning.setTranslateY(-15);
+        warning.textProperty().bindBidirectional(model.getWarningProperty());
+
+        Timeline tl = new Timeline();
+        tl.getKeyFrames().add(new KeyFrame(Duration.ZERO, (e) -> {warning.setOpacity(0.95);}));
+        tl.getKeyFrames().add(new KeyFrame(Duration.millis(1500)));
+
+        tl.onFinishedProperty().set((ActionEvent e) -> {
+            warning.setOpacity(0);
+            warning.setText("");
+        });
+        model.getFlipFlop().addListener((obs, oldVal, newVal) -> {
+            tl.stop();
+            tl.play();
+        });
+        warning.setStyle("-fx-font-family: serif;" + "-fx-font-size: 20.0;" + "-fx-font-weight: bold;" + "-fx-background-radius: 2;" + "-fx-text-fill: black;" + "-fx-background-color: white;");
+        warning.setPadding(new Insets(7, 10, 7, 10));
         return warning;
     }
 
@@ -159,7 +173,7 @@ public class ViewBuilder implements Builder<Region>{
         Button submit = new Button("Enter");
         submit.setDefaultButton(true);
         submit.disableProperty().bind(model.gameDisableProperty());
-        submit.setOnAction(evt -> submitHandler.run());
+        submit.setOnAction(e -> submitHandler.run());
         return submit;
     }    
 }

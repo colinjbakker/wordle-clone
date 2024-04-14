@@ -12,9 +12,8 @@ public class Guess {
     private final SimpleBooleanProperty disableProperty = new SimpleBooleanProperty(true);
 
     public Guess(){
-        //creates five letters in the guess array, default empty string, disabled, incorrect, not in solution
         for(int i = 0; i < 5; i++){
-            letterArray.add(new Letter("", true, false, false));
+            letterArray.add(new Letter());
         }
     }
 

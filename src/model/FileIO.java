@@ -41,7 +41,7 @@ public class FileIO{
 
 	public String getRandomWord(){
 		Random rand = new Random();
-		int index = rand.nextInt(5757);
+		int index = rand.nextInt(wordsList.size());
 		return wordsList.get(index);
 	}
 }

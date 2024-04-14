@@ -7,13 +7,25 @@ import javafx.beans.property.SimpleStringProperty;
 //Data representation of the GUI, no logic
 
 public class Model {
-    private final SimpleStringProperty guess = new SimpleStringProperty("");
-    private final SimpleStringProperty solution = new SimpleStringProperty("hello");
+    private final SimpleStringProperty solution = new SimpleStringProperty("");
     private final SimpleIntegerProperty guessCount = new SimpleIntegerProperty(0);
     private final SimpleBooleanProperty universalDisable = new SimpleBooleanProperty(false);
     private final SimpleIntegerProperty inputCount = new SimpleIntegerProperty(0);
     private final SimpleStringProperty warning = new SimpleStringProperty("");
+    private final SimpleBooleanProperty flipFlop = new SimpleBooleanProperty(false);
     private final Shadow guessList = new Shadow();
+    
+    public SimpleBooleanProperty getFlipFlop(){
+        return flipFlop;
+    }
+
+    public Boolean getFlipFlopBoolean(){
+        return flipFlop.get();
+    }
+
+    public void flipFlipFlop(){
+        flipFlop.set(!flipFlop.get());
+    }
 
     public int getInputCount(){
         return inputCount.get();
@@ -21,18 +33,6 @@ public class Model {
 
     public void setInputCount(int inputCount){
         this.inputCount.set(inputCount);
-    }
-
-    public String getGuess(){
-        return guess.get();
-    }
-
-    public SimpleStringProperty guessProperty() {
-        return guess;
-    }  
-
-    public void setGuess(String guess){
-        this.guess.set(guess);
     }
 
     public String getSolution() {
@@ -91,10 +91,8 @@ public class Model {
         if(type == 0){
             warning.set("Not in word list");
         } else if(type == 1){
-            System.out.println("test2");
             warning.set("Not enough letters");
         } else{
-            System.out.println("test3");
             warning.set("");
         }
     }

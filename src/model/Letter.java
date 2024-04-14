@@ -5,17 +5,10 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class Letter {
     private final SimpleStringProperty letterString = new SimpleStringProperty(" "); //bind to input textproperty
-    private final SimpleBooleanProperty letterDisable = new SimpleBooleanProperty(false); //bind to input disableproperty
-    private final SimpleBooleanProperty letterCorrect = new SimpleBooleanProperty(false); //bind to bg color      if(lettercorrect) : green, elif(letterinsolution) : yellow, else : color gray
-    private final SimpleBooleanProperty letterInSolution = new SimpleBooleanProperty(false); //bind to bg color
-    private final SimpleBooleanProperty letterUnsubmitted = new SimpleBooleanProperty(true);
-
-    public Letter(String letter, Boolean disable, Boolean correct, Boolean inSolution){
-        letterString.set(letter);
-        letterDisable.set(disable);
-        letterCorrect.set(correct);
-        letterInSolution.set(inSolution);
-    }
+    private final SimpleBooleanProperty letterDisable = new SimpleBooleanProperty(true); //bind to input disableproperty
+    private final SimpleBooleanProperty green = new SimpleBooleanProperty(false); //bind to bg color      if(lettercorrect) : green, elif(letterinsolution) : yellow, else : color gray
+    private final SimpleBooleanProperty yellow = new SimpleBooleanProperty(false); //bind to bg color
+    private final SimpleBooleanProperty gray = new SimpleBooleanProperty(false);
 
     public SimpleStringProperty getLetterStringProperty(){
         //Get the actual letterString property
@@ -46,40 +39,40 @@ public class Letter {
         letterDisable.set(!letterDisable.get());
     }
 
-    public SimpleBooleanProperty getLetterCorrect(){
-        return letterCorrect;
+    public SimpleBooleanProperty getGreen(){
+        return green;
     }
 
-    public Boolean getLetterCorrectBoolean(){
-        return letterCorrect.get();
+    public Boolean getGreenBoolean(){
+        return green.get();
     }
 
-    public void flipLetterCorrect(){
-        letterCorrect.set(true);
+    public void makeGreen(){
+        green.set(true);
     }
 
-    public SimpleBooleanProperty getLetterInSolution(){
-        return letterInSolution;
+    public SimpleBooleanProperty getYellow(){
+        return yellow;
     }
 
-    public Boolean getLetterInSolutionBoolean(){
-        return letterInSolution.get();
+    public Boolean getYelowBoolean(){
+        return yellow.get();
     }
 
-    public void flipLetterInSolution(){
-        letterInSolution.set(true);
+    public void makeYellow(){
+        yellow.set(true);
     }
 
-    public SimpleBooleanProperty getLetterUnsubmitted(){
-        return letterUnsubmitted;
+    public SimpleBooleanProperty getGray(){
+        return gray;
     }
 
-    public Boolean getLetterUnsubmittedBoolean(){
-        return letterUnsubmitted.get();
+    public Boolean getGrayBoolean(){
+        return gray.get();
     }
 
-    public void flipLetterUnsubmitted(){
-        letterUnsubmitted.set(false);
+    public void makeGray(){
+        gray.set(true);
     }
 }
 
