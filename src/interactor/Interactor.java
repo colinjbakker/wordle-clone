@@ -23,7 +23,7 @@ public class Interactor {
     public void prepWordFile(String fileName){
         fileIO.scanFile(fileName);
     }
-
+    
     public void submitGuess(){
         int gc = model.getGuessCount();
         String guess = model.guessAt(gc).getGuessString();

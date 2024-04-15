@@ -12,6 +12,8 @@ import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -110,11 +112,22 @@ public class ViewBuilder{
         TextField textField = new TextField();
         textField.textProperty().bindBidirectional(stringProperty);
         textField.disableProperty().bind(disableProperty);
-        disableProperty.addListener((obs, oldVal, newVal) -> {
-            if(!disableProperty.get()){
-                textField.requestFocus();
+        textField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue){
+                if(!disableProperty.get()){
+                    textField.requestFocus();
+                }
+                
+                
             }
         });
+        // disableProperty.addListener((obs, oldVal, newVal) -> {
+        //     if(!disableProperty.get()){
+        //         System.out.println("request focus 2");
+        //         textField.requestFocus();
+        //     }
+        // });
         UnaryOperator<TextFormatter.Change> filter = change -> {
             String text = change.getControlNewText();
             //[a-zA-Z]* 0 or more letters between a and z
@@ -214,12 +227,17 @@ public class ViewBuilder{
         hbox2.setAlignment(Pos.CENTER);
         hbox3.setAlignment(Pos.CENTER);
         for(int i = 0; i < 26; i++){
-            Label label = new Label();
-            label.textProperty().bind(model.getShadow().keyAt(i).getLetterStringProperty());
-            label.setPrefSize(36, 36);
-            label.setAlignment(Pos.CENTER);
-            label.setStyle("-fx-text-fill: white;" + "-fx-font-family: serif;"+"-fx-font-size: 16.0;" + "-fx-font-weight: bold;" + "-fx-border-style: solid;" + "-fx-border-width: 3;"+ "-fx-border-color: rgb(65, 65, 65);");
-            label.backgroundProperty().bind(
+            Button button = new Button();
+            button.textProperty().bind(model.getShadow().keyAt(i).getLetterStringProperty());
+            button.setPrefSize(40, 40);
+            button.setAlignment(Pos.CENTER);
+            button.setOnAction(e -> {
+                
+                String newString = model.guessAt(model.getGuessCount()).getGuessString() + button.textProperty().get();
+                model.guessAt(model.getGuessCount()).setGuessString(newString);
+            });
+            button.setStyle("-fx-text-fill: white;" + "-fx-font-family: serif;"+"-fx-font-size: 13.0;" + "-fx-font-weight: bold;" + "-fx-border-style: solid;" + "-fx-border-width: 3;"+ "-fx-border-color: rgb(65, 65, 65);");
+            button.backgroundProperty().bind(
                 Bindings.when(model.getShadow().keyAt(i).getGreen()).then(new Background(new BackgroundFill(Color.GREEN, null, null))).otherwise(
                    Bindings.when(model.getShadow().keyAt(i).getYellow()).then(new Background(new BackgroundFill(Color.rgb(219, 161, 0), null, null))).otherwise(
                         Bindings.when(model.getShadow().keyAt(i).getGray()).then(new Background(new BackgroundFill(Color.rgb(65, 65, 65), null, null))).otherwise(
@@ -229,11 +247,11 @@ public class ViewBuilder{
                 )
             );
             if(i < 10){
-                hbox1.getChildren().add(label);
+                hbox1.getChildren().add(button);
             }else if(i < 19){
-                hbox2.getChildren().add(label);
+                hbox2.getChildren().add(button);
             } else{
-                hbox3.getChildren().add(label);
+                hbox3.getChildren().add(button);
             }
         }
         vbox.getChildren().addAll(hbox1, hbox2, hbox3);
