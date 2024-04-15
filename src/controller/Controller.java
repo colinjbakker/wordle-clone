@@ -17,7 +17,7 @@ public class Controller{
 		Model model = new Model();
 		FileIO fileio = new FileIO();
 		interactor = new Interactor(model, fileio);
-		viewBuilder = new ViewBuilder(model, interactor::submitGuess, interactor::changeHandler);
+		viewBuilder = new ViewBuilder(model, interactor::submitGuess, interactor::changeHandler, interactor::newGame);
 	}
 
 	public void prepWordFile(String fileName){

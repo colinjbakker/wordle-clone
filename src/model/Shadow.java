@@ -27,4 +27,14 @@ public class Shadow{
     public Guess guessAt(int index){
         return shadowList.get(index);
     }
+
+    public void reset(){
+        for(Guess i : shadowList){
+            i.reset();
+        }
+        for(Letter j : keyboard){
+            j.resetColors();
+        }
+        shadowList.get(0).flipDisable();
+    }
 }

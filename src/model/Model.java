@@ -13,8 +13,64 @@ public class Model {
     private final SimpleIntegerProperty inputCount = new SimpleIntegerProperty(0);
     private final SimpleStringProperty warning = new SimpleStringProperty("");
     private final SimpleBooleanProperty flipFlop = new SimpleBooleanProperty(false);
+
+
+    private final SimpleBooleanProperty startVisibility = new SimpleBooleanProperty(true);
+    private final SimpleBooleanProperty gameVisibility = new SimpleBooleanProperty(false);
+    private final SimpleBooleanProperty statsVisibility = new SimpleBooleanProperty(false);
+
     private final Shadow guessList = new Shadow();
+
+    public void reset(){
+        solution.set("");
+        guessCount.set(0);
+        universalDisable.set(false);
+        inputCount.set(0);
+        warning.set("");
+        flipFlop.set(false);
+        guessList.reset();
+    }
+
+    public SimpleBooleanProperty getStartVisibilityProperty(){
+        return startVisibility;
+    }
+
+    public Boolean getStartVisibility(){
+        return startVisibility.get();
+    }
+
+    public SimpleBooleanProperty getGameVisibilityProperty(){
+        return gameVisibility;
+    }
+
+    public Boolean getGameVisibility(){
+        return gameVisibility.get();
+    }
+
+    public SimpleBooleanProperty getStatsVisibilityProperty(){
+        return statsVisibility;
+    }
+
+    public Boolean getStatsVisibility(){
+        return statsVisibility.get();
+    }
     
+    public void setVisibility(int index){
+        if(index == 0){
+            startVisibility.set(true);
+            gameVisibility.set(false);
+            statsVisibility.set(false);
+        } else if(index == 1){
+            startVisibility.set(false);
+            gameVisibility.set(true);
+            statsVisibility.set(false);
+        } else {
+            startVisibility.set(false);
+            gameVisibility.set(false);
+            statsVisibility.set(true);
+        }
+    }
+
     public SimpleBooleanProperty getFlipFlop(){
         return flipFlop;
     }

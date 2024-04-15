@@ -13,10 +13,15 @@ public class Interactor {
         this.fileIO = fileIO;
     }
 
-    public void prepWordFile(String fileName){
-        fileIO.scanFile(fileName);
+    public void newGame(){
+        model.reset();
         model.setSolution(fileIO.getRandomWord());
         System.out.println(model.getSolution()); //hehe
+        model.setVisibility(1);
+    }
+
+    public void prepWordFile(String fileName){
+        fileIO.scanFile(fileName);
     }
 
     public void submitGuess(){

@@ -19,6 +19,14 @@ public class Guess {
         }
     }
 
+    public void reset(){
+        for(Letter i : letterArray){
+            i.reset();
+        }
+        guessString.set("");
+        disableProperty.set(true);
+    }
+
     public SimpleBooleanProperty getDisableProperty(){
         return disableProperty;
     }

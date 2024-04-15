@@ -18,6 +18,18 @@ public class Letter {
         gray.set(false);
     }
 
+    public void reset(){
+        letterString.set("");
+        letterDisable.set(true);
+        resetColors();
+    }
+
+    public void resetColors(){
+        green.set(false);
+        yellow.set(false);
+        gray.set(false);
+    }
+
     public SimpleStringProperty getLetterStringProperty(){
         //Get the actual letterString property
         return letterString;

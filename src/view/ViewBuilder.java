@@ -32,20 +32,46 @@ public class ViewBuilder{
     private final Model model;
     private final Runnable submitHandler;
     private final Runnable changeHandler;
+    private final Runnable newGame;
 
-    public ViewBuilder(Model model, Runnable submitHandler, Runnable changeHandler){
+    public ViewBuilder(Model model, Runnable submitHandler, Runnable changeHandler, Runnable newGame){
         this.model = model;
         this.submitHandler = submitHandler;
         this.changeHandler = changeHandler;
+        this.newGame = newGame;
     }
 
     public Region build(){
-        BorderPane page = new BorderPane();
-        page.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
-        page.setTop(headingLabel("WORDLE"));
-        page.setCenter(createCenter());
-        page.setBottom(createBottom());
-        return page;
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().addAll(createStartPane(), createGamePane());
+        return stackPane;
+    }
+
+    private Node createStartPane(){
+        BorderPane borderPane = new BorderPane();
+        borderPane.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+        borderPane.setTop(headingLabel("WORDLE"));
+        borderPane.setCenter(createStartCenter());
+        borderPane.visibleProperty().bind(model.getStartVisibilityProperty());
+        return borderPane;
+    }
+
+    private Node createStartCenter(){
+        Button reset = new Button("START");
+        reset.setDefaultButton(false);
+        reset.setOnAction(e -> newGame.run());
+        reset.setStyle("-fx-font-family: serif;" +"-fx-font-size: 16.0;" + "-fx-font-weight: bold;" + "-fx-border-style: solid;" + "-fx-border-width: 3;"+"-fx-border-color: rgb(65, 65, 65);"+"-fx-text-fill: white;" + "-fx-background-color: black;");
+        return reset;
+    }
+
+    private Node createGamePane(){
+        BorderPane borderPane = new BorderPane();
+        borderPane.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+        borderPane.setTop(headingLabel("WORDLE"));
+        borderPane.setCenter(createCenter());
+        borderPane.setBottom(createBottom());
+        borderPane.visibleProperty().bind(model.getGameVisibilityProperty());
+        return borderPane;
     }
 
     //----------------TOP------------------
@@ -84,7 +110,11 @@ public class ViewBuilder{
         TextField textField = new TextField();
         textField.textProperty().bindBidirectional(stringProperty);
         textField.disableProperty().bind(disableProperty);
-        
+        disableProperty.addListener((obs, oldVal, newVal) -> {
+            if(!disableProperty.get()){
+                textField.requestFocus();
+            }
+        });
         UnaryOperator<TextFormatter.Change> filter = change -> {
             String text = change.getControlNewText();
             //[a-zA-Z]* 0 or more letters between a and z
@@ -152,11 +182,16 @@ public class ViewBuilder{
             warning.setOpacity(0);
             warning.setText("");
         });
+        warning.textProperty().addListener((obs, oldVal, newVal) ->{
+            if(warning.getText() == ""){
+                warning.setOpacity(0);
+            }
+        });
         model.getFlipFlop().addListener((obs, oldVal, newVal) -> {
             tl.stop();
             tl.play();
         });
-        warning.setStyle("-fx-font-family: serif;" + "-fx-font-size: 20.0;" + "-fx-font-weight: bold;" + "-fx-background-radius: 2;" + "-fx-text-fill: black;" + "-fx-background-color: white;");
+        warning.setStyle("-fx-font-family: serif;" + "-fx-font-size: 20.0;" + "-fx-font-weight: bold;" +  "-fx-background-radius: 2;" + "-fx-text-fill: black;" + "-fx-background-color: white;");
         warning.setPadding(new Insets(7, 10, 7, 10));
         return warning;
     }
@@ -212,5 +247,5 @@ public class ViewBuilder{
         submit.setOnAction(e -> submitHandler.run());
         submit.setStyle("-fx-font-family: serif;" +"-fx-font-size: 16.0;" + "-fx-font-weight: bold;" + "-fx-border-style: solid;" + "-fx-border-width: 3;"+"-fx-border-color: rgb(65, 65, 65);"+"-fx-text-fill: white;" + "-fx-background-color: black;");
         return submit;
-    }    
+    }  
 }

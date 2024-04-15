@@ -13,7 +13,7 @@ public class App extends Application {
 		controller.prepWordFile("resources/valid-wordle-words.txt");
 		Scene scene = new Scene(controller.getView());
 		primaryStage.setScene(scene);
-		primaryStage.setMinHeight(820);
+		primaryStage.setMinHeight(806);
 		primaryStage.setMinWidth(500);
 		primaryStage.show();
 	}
