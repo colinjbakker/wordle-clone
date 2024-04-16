@@ -3,7 +3,7 @@ package view;
 import model.Model;
 
 import javafx.scene.paint.Color;
-
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import java.util.function.UnaryOperator;
 
@@ -11,6 +11,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -45,7 +47,7 @@ public class ViewBuilder{
 
     public Region build(){
         StackPane stackPane = new StackPane();
-        stackPane.getChildren().addAll(createStartPane(), createGamePane());
+        stackPane.getChildren().addAll(createStartPane(), createGamePane(), createStatsPane());
         return stackPane;
     }
 
@@ -53,14 +55,13 @@ public class ViewBuilder{
         BorderPane borderPane = new BorderPane();
         borderPane.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
         borderPane.setTop(headingLabel("WORDLE"));
-        borderPane.setCenter(createStartCenter());
+        borderPane.setCenter(createResetButton("START"));
         borderPane.visibleProperty().bind(model.getStartVisibilityProperty());
         return borderPane;
     }
 
-    private Node createStartCenter(){
-        Button reset = new Button("START");
-        reset.setDefaultButton(false);
+    private Node createResetButton(String content){
+        Button reset = new Button(content);
         reset.setOnAction(e -> newGame.run());
         reset.setStyle("-fx-font-family: serif;" +"-fx-font-size: 16.0;" + "-fx-font-weight: bold;" + "-fx-border-style: solid;" + "-fx-border-width: 3;"+"-fx-border-color: rgb(65, 65, 65);"+"-fx-text-fill: white;" + "-fx-background-color: black;");
         return reset;
@@ -266,4 +267,90 @@ public class ViewBuilder{
         submit.setStyle("-fx-font-family: serif;" +"-fx-font-size: 16.0;" + "-fx-font-weight: bold;" + "-fx-border-style: solid;" + "-fx-border-width: 3;"+"-fx-border-color: rgb(65, 65, 65);"+"-fx-text-fill: white;" + "-fx-background-color: black;");
         return submit;
     }  
+
+    private Node createStatsPane(){
+        BorderPane borderPane = new BorderPane();
+        borderPane.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+        borderPane.setTop(headingLabel("STATS"));
+        borderPane.setCenter(createStatsCenter());
+        borderPane.visibleProperty().bind(model.getStatsVisibilityProperty());
+        return borderPane;
+    }
+
+    private Node createStatsCenter(){
+        //played, win%, streak, max streak
+        //guess distribution
+        VBox vbox = new VBox();
+        
+        vbox.getChildren().addAll(createStatsLabels(), createGraph(), createResetButton("NEW GAME"));
+        vbox.setAlignment(Pos.TOP_CENTER);
+        vbox.setSpacing(10);
+        return vbox;
+    }
+
+    private Node createGraph(){
+        VBox vbox = new VBox();
+        for(int i = 1; i <= 6; i++){
+            Label label = new Label(i + "");
+            label.setStyle("-fx-font-family: serif;"+"-fx-font-size: 20;"+"-fx-text-fill: white;");
+            Rectangle rectangle = new Rectangle(0, 15, Color.GREEN);
+            rectangle.widthProperty().bind(model.getStats().winArrayPropertyAt(i-1));
+            HBox hbox = new HBox(label, rectangle);
+            hbox.setSpacing(6);
+            hbox.setAlignment(Pos.CENTER_LEFT);
+            vbox.getChildren().add(hbox);
+            
+        }
+        
+        
+        vbox.setMaxWidth(219);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setSpacing(10);
+        return vbox;
+    }
+
+    private Node createStatsLabels(){
+        HBox hbox = new HBox(
+            createStatVBox(statLabel(model.getStats().getGameCountProperty()), statLabel("Played")),
+            createStatVBox(statLabel(model.getStats().getWinRateProperty()), statLabel("Win %")), 
+            createStatVBox(statLabel(model.getStats().getCurrentStreakProperty()), statLabel("Current Streak")), 
+            createStatVBox(statLabel(model.getStats().getMaxStreakProperty()), statLabel("Max Streak"))
+        );
+        hbox.setSpacing(15);
+        hbox.setAlignment(Pos.TOP_CENTER);
+        return hbox;
+    }
+
+    private Node createStatVBox(Node label1, Node label2){
+        VBox vbox = new VBox(label1, label2);
+        vbox.setSpacing(6);
+        vbox.setAlignment(Pos.TOP_CENTER);
+        return vbox;
+    }
+
+    private Node statLabel(String content){
+        Label label = new Label();
+        label.setText(content);
+        label.setAlignment(Pos.CENTER);
+        label.setMaxWidth(70);
+        label.setStyle("-fx-font-family: serif;"+"-fx-font-size: 15;"+"-fx-text-fill: white;"+"-fx-text-alignment: center;");
+        label.setWrapText(true);
+        return label;
+    }
+
+    private Node statLabel(SimpleIntegerProperty boundProperty){
+        Label label = new Label();
+        label.textProperty().bind(boundProperty.asString());
+        label.setAlignment(Pos.CENTER);
+        label.setStyle("-fx-font-family: serif;"+"-fx-font-size: 25;"+"-fx-text-fill: white;"+"-fx-text-alignment: center;");
+        return label;
+    }
+
+    private Node statLabel(SimpleStringProperty boundProperty){
+        Label label = new Label();
+        label.textProperty().bind(boundProperty);
+        label.setAlignment(Pos.CENTER);
+        label.setStyle("-fx-font-family: serif;"+"-fx-font-size: 25;"+"-fx-text-fill: white;"+"-fx-text-alignment: center;");
+        return label;
+    }
 }

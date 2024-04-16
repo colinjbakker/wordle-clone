@@ -20,6 +20,7 @@ public class Model {
     private final SimpleBooleanProperty statsVisibility = new SimpleBooleanProperty(false);
 
     private final Shadow guessList = new Shadow();
+    private final Stats stats = new Stats();
 
     public void reset(){
         solution.set("");
@@ -29,6 +30,10 @@ public class Model {
         warning.set("");
         flipFlop.set(false);
         guessList.reset();
+    }
+
+    public Stats getStats(){
+        return stats;
     }
 
     public SimpleBooleanProperty getStartVisibilityProperty(){

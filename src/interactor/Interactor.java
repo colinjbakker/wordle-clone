@@ -23,7 +23,29 @@ public class Interactor {
     public void prepWordFile(String fileName){
         fileIO.scanFile(fileName);
     }
-    
+
+    public void updateStats(){
+        model.setVisibility(2);
+
+
+        model.getStats().setGameCount(model.getStats().getGameCount() + 1); //increase game count
+
+        if(checkWin(model.guessAt(model.getGuessCount()).getGuessString())){ //if win
+            System.out.println("win");
+            model.getStats().setWinCount(model.getStats().getWinCount() + 1); //increase win count
+            model.getStats().setWinCountArray(model.getGuessCount(), model.getStats().winCountArrayAt(model.getGuessCount()) + 1); //increment win array
+            model.getStats().setCurrentStreak(model.getStats().getCurrentStreak() + 1); //increment current streak
+            if(model.getStats().getCurrentStreak() > model.getStats().getMaxStreak()){
+                model.getStats().setMaxStreak(model.getStats().getCurrentStreak()); // update max streak
+            }
+        } else{
+            model.getStats().setCurrentStreak(0);
+        }
+        model.getStats().setWinRate((100 * model.getStats().getWinCount()) / (model.getStats().getGameCount()) + "%"); // update win rate
+        model.getStats().updateWinArray();
+        System.out.println(model.getStats());
+    }
+
     public void submitGuess(){
         int gc = model.getGuessCount();
         String guess = model.guessAt(gc).getGuessString();
@@ -33,7 +55,9 @@ public class Interactor {
                 setBoardFlags();
                 model.swapGameDisable();
                 model.guessAt(gc).flipDisable();
-            } else{
+                updateStats();
+            }
+            else{
                 setBoardFlags();
                 increment();
             }
