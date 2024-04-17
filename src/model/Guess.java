@@ -27,25 +27,21 @@ public class Guess {
         disableProperty.set(true);
     }
 
-    public SimpleBooleanProperty getDisableProperty(){
-        return disableProperty;
-    }
+    public ArrayList<Letter> getLetterArray() { return letterArray; }
+    public String getGuessString()            { return guessString.get(); }
+    public Boolean getDisable()               { return disableProperty.get(); }
 
-    public Boolean getDisable(){
-        return disableProperty.get();
-    }
+    public SimpleStringProperty getGuessStringProperty() { return guessString; }
+    public SimpleBooleanProperty getDisableProperty()    { return disableProperty; }
+
+    public void setGuessString(String guessString)          { this.guessString.set(guessString); }
+    public void setDisableProperty(Boolean disableProperty) { this.disableProperty.set(disableProperty); }
 
     public void flipDisable(){
-        disableProperty.set(!disableProperty.get());
-    }
-
-    public ArrayList<Letter> getLetterArray(){
-        //returns enture array
-        return letterArray;
+        setDisableProperty(!getDisable());
     }
 
     public Letter letterAt(int index){
-        //returns the letter at index
         return letterArray.get(index);
     }
 
@@ -57,17 +53,5 @@ public class Guess {
         for(int j = guessString.get().length(); j < 5; j++){
             letterArray.get(j).setLetterString(" ");
         }
-    }
-
-    public SimpleStringProperty getGuessStringProperty(){
-        return guessString;
-    }
-
-    public String getGuessString(){
-        return guessString.get();
-    }
-
-    public void setGuessString(String guessString){
-        this.guessString.set(guessString);
-    }
+    } 
 }

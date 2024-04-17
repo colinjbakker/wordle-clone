@@ -20,8 +20,9 @@ public class Controller{
 		viewBuilder = new ViewBuilder(model, interactor::submitGuess, interactor::changeHandler, interactor::newGame);
 	}
 
-	public void prepWordFile(String fileName){
-		interactor.prepWordFile(fileName);
+	public void prepWordFile(String userList, String completeList){
+		interactor.prepWordFile(userList, completeList);
+		//interactor.newGame();
 	}
 
 	public Region getView() {

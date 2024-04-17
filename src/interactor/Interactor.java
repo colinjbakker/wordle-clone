@@ -17,21 +17,20 @@ public class Interactor {
         model.reset();
         model.setSolution(fileIO.getRandomWord());
         System.out.println(model.getSolution()); //hehe
-        model.setVisibility(1);
+        model.getShadow().guessAt(0).flipDisable();
+        model.setStatsVisibility(false);
     }
 
-    public void prepWordFile(String fileName){
-        fileIO.scanFile(fileName);
+    public void prepWordFile(String userList, String completeList){
+        fileIO.scanFile(userList, completeList);
     }
 
     public void updateStats(){
-        model.setVisibility(2);
-
+        model.setStatsVisibility(true);
 
         model.getStats().setGameCount(model.getStats().getGameCount() + 1); //increase game count
 
-        if(checkWin(model.guessAt(model.getGuessCount()).getGuessString())){ //if win
-            System.out.println("win");
+        if(checkWin(model.getShadow().guessAt(model.getGuessCount()).getGuessString())){ //if win
             model.getStats().setWinCount(model.getStats().getWinCount() + 1); //increase win count
             model.getStats().setWinCountArray(model.getGuessCount(), model.getStats().winCountArrayAt(model.getGuessCount()) + 1); //increment win array
             model.getStats().setCurrentStreak(model.getStats().getCurrentStreak() + 1); //increment current streak
@@ -41,21 +40,25 @@ public class Interactor {
         } else{
             model.getStats().setCurrentStreak(0);
         }
-        model.getStats().setWinRate((100 * model.getStats().getWinCount()) / (model.getStats().getGameCount()) + "%"); // update win rate
+        if(model.getStats().getGameCount() == 0){
+            model.getStats().setWinPercent("0%");
+        } else{
+            model.getStats().setWinPercent((100 * model.getStats().getWinCount()) / (model.getStats().getGameCount()) + "%"); // update win rate
+        }
         model.getStats().updateWinArray();
-        System.out.println(model.getStats());
     }
 
     public void submitGuess(){
         int gc = model.getGuessCount();
-        String guess = model.guessAt(gc).getGuessString();
-        model.guessAt(model.getGuessCount()).createLetterArray();
+        String guess = model.getShadow().guessAt(gc).getGuessString();
+        model.getShadow().guessAt(model.getGuessCount()).createLetterArray();
         if(checkValid(guess)){
             if(checkWin(guess) || (gc == 5)){
                 setBoardFlags();
                 model.swapGameDisable();
-                model.guessAt(gc).flipDisable();
+                model.getShadow().guessAt(gc).flipDisable();
                 updateStats();
+                fileIO.updateList("resources/wordlists/userList.txt");
             }
             else{
                 setBoardFlags();
@@ -65,21 +68,21 @@ public class Interactor {
     }
     
     public void changeHandler(){
-        model.guessAt(model.getGuessCount()).createLetterArray();
+        model.getShadow().guessAt(model.getGuessCount()).createLetterArray();
     }
 
     private Boolean checkValid(String guess){
         if(guess.length() != 5){
-            model.setWarning(1);
+            model.setWarning("Not enough letters");
             model.flipFlipFlop();;
             return false;
         }
         else if(!fileIO.inList(guess)){
-            model.setWarning(0);
+            model.setWarning("Not in word list");
             model.flipFlipFlop();
             return false;
         }
-        model.setWarning(2);
+        model.setWarning("");
         
         return true;
     }
@@ -96,20 +99,23 @@ public class Interactor {
     }
 
     private void setBoardFlags(){
-        String guess = model.guessAt(model.getGuessCount()).getGuessString();
+        String guess = model.getShadow().guessAt(model.getGuessCount()).getGuessString();
         String solution = model.getSolution().toUpperCase();
         int guessLetterCount;
         int solutionLetterCount;
         boolean foundFlag;
+        String green = "rgb(1, 112, 66)";
+        String yellow = "rgb(181, 135, 9)";
+        String gray = "rgb(65, 65, 65)";
         int keyIndex = 0;
         for(int i = 0; i < 5; i++){
             keyIndex = getKeyIndex(guess.substring(i, i+1));
             if(solution.contains(guess.substring(i, i+1))){
                 if(guess.substring(i, i+1).equals(solution.substring(i, i+1))){
                     //correct guess
-                    model.guessAt(model.getGuessCount()).letterAt(i).makeGreen();
+                    model.getShadow().guessAt(model.getGuessCount()).letterAt(i).setColor(green);
                     if(keyIndex >= 0){
-                        model.getShadow().keyAt(keyIndex).makeGreen(); 
+                        model.getShadow().keyAt(keyIndex).setColor(green);
                     }
                 } else {
                     //give info about number of letter appearances in word
@@ -117,9 +123,9 @@ public class Interactor {
                     solutionLetterCount = 0; 
                     foundFlag = false;
 
-                    if(!model.getShadow().keyAt(keyIndex).getGreen().get()){
+                    if(model.getShadow().keyAt(keyIndex).getColor() != "rgb(1, 112, 66)"){
                         if(keyIndex >= 0){
-                            model.getShadow().keyAt(keyIndex).makeYellow(); 
+                            model.getShadow().keyAt(keyIndex).setColor(yellow);
                         }
                     }
 
@@ -141,23 +147,24 @@ public class Interactor {
                     }
 
                     if(guessLetterCount < solutionLetterCount){
-                        model.guessAt(model.getGuessCount()).letterAt(i).makeYellow();
+                        model.getShadow().guessAt(model.getGuessCount()).letterAt(i).setColor(yellow);
                     } else {
-                        model.guessAt(model.getGuessCount()).letterAt(i).makeGray();
+                        model.getShadow().guessAt(model.getGuessCount()).letterAt(i).setColor(gray);
                     }
                 }
             } else {
                 //incorrect guess
-                model.guessAt(model.getGuessCount()).letterAt(i).makeGray();
+                model.getShadow().guessAt(model.getGuessCount()).letterAt(i).setColor(gray);
                 if(keyIndex >= 0){
-                    model.getShadow().keyAt(keyIndex).makeGray(); 
+                    model.getShadow().keyAt(keyIndex).setColor(gray);
                 }
             }
+
         }
     }
     private void increment(){
-        model.guessAt(model.getGuessCount()).flipDisable();
-        model.guessAt(model.getGuessCount()+1).flipDisable();
+        model.getShadow().guessAt(model.getGuessCount()).flipDisable();
+        model.getShadow().guessAt(model.getGuessCount()+1).flipDisable();
         model.incrementGuessCount();
     }
 
