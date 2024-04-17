@@ -3288,7 +3288,6 @@ dopas
 doped
 doper
 dopes
-dopey
 doppe
 dorad
 dorba
@@ -4167,7 +4166,6 @@ firns
 firry
 first
 firth
-fiscs
 fisho
 fishy
 fisks
@@ -8317,7 +8315,6 @@ nerve
 nervy
 neski
 nests
-nesty
 netas
 netes
 netop
@@ -10135,7 +10132,6 @@ quest
 quete
 queue
 queyn
-queys
 queyu
 quibs
 quich
