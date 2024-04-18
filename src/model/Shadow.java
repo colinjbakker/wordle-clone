@@ -7,27 +7,21 @@ public class Shadow{
     private final ArrayList<Letter> keyboard = new ArrayList<Letter>(26);
 
     public Shadow() {
-        for(int i = 0; i < 6; i++){
-            shadowList.add(new Guess());
-        }
         String[] qwerty = {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F", "G", "H", "J", "K", "L", "Z", "X", "C", "V", "B", "N", "M"};
-        for(String j : qwerty){
-            keyboard.add(new Letter(j));
-        }
+        for(int i = 0; i < 6; i++) shadowList.add(new Guess());
+        for(String j : qwerty) keyboard.add(new Letter(j));
     }
 
     public void reset(){
-        for(Guess i : shadowList){
-            i.reset();
-        }
-        for(Letter j : keyboard){
-            j.resetColors();
-        }
+        for(Guess i : shadowList) i.reset();
+        for(Letter j : keyboard) j.resetColors();
     }
 
+    //Getters
     public ArrayList<Guess> getShadowList() { return shadowList; }
     public ArrayList<Letter> getKeyboard()  { return keyboard; }
 
-    public Letter keyAt(int index)  { return keyboard.get(index); }
+    //Accessors
+    public Letter keyAt(int index) { return keyboard.get(index); }
     public Guess guessAt(int index) { return shadowList.get(index); }
 }

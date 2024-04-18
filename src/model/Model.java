@@ -7,25 +7,34 @@ import javafx.beans.property.SimpleStringProperty;
 //Data representation of the GUI, no logic
 
 public class Model {
-    private final SimpleStringProperty solution = new SimpleStringProperty("");
-    private final SimpleStringProperty warning = new SimpleStringProperty("");
-
-    private final SimpleIntegerProperty guessCount = new SimpleIntegerProperty(0);
-    private final SimpleIntegerProperty inputCount = new SimpleIntegerProperty(0);
-
-    private final SimpleBooleanProperty gameDisable = new SimpleBooleanProperty(true);
-    private final SimpleBooleanProperty flipFlop = new SimpleBooleanProperty(false);
-    private final SimpleBooleanProperty statsVisibility = new SimpleBooleanProperty(true);
-
+    //Variables are all final, but because they are properties, can be changed with the set function
+    //It's better that they are final so that I can make sure they are not accidentially changed, causing something to be unlinked
+    private final SimpleStringProperty solution = new SimpleStringProperty();
+    private final SimpleStringProperty warning = new SimpleStringProperty();
+    private final SimpleIntegerProperty guessCount = new SimpleIntegerProperty();
+    private final SimpleIntegerProperty inputCount = new SimpleIntegerProperty();
+    private final SimpleBooleanProperty gameDisable = new SimpleBooleanProperty();
+    private final SimpleBooleanProperty flipFlop = new SimpleBooleanProperty();
+    private final SimpleBooleanProperty statsVisibility = new SimpleBooleanProperty();
     private final Shadow guessList = new Shadow();
     private final Stats stats = new Stats();
 
+    public Model(){
+        solution.set("");
+        warning.set("");
+        guessCount.set(0);
+        inputCount.set(0);
+        gameDisable.set(true);
+        flipFlop.set(false);
+        statsVisibility.set(true);
+    }
+
     public void reset(){
+        //warning and flipflip not reset, causes empty warning to appear
         solution.set("");
         guessCount.set(0);
         gameDisable.set(false);
         inputCount.set(0);
-        flipFlop.set(false);
         guessList.reset();
     }
 
@@ -58,15 +67,6 @@ public class Model {
     public void setFlipFlip(Boolean flipFlop)               { this.flipFlop.set(flipFlop); }
     public void setStatsVisibility(Boolean statsVisibility) { this.statsVisibility.set(statsVisibility); }
 
-    public void flipFlipFlop(){
-        setFlipFlip(!getFlipFlop());
-    }
-
-    public void swapGameDisable(){
-        setGameDisable(!getGameDisable());
-    }
-
-    public void incrementGuessCount() {
-        guessCount.set(getGuessCount() + 1);
-    }    
+    public void flipFlipFlop()    { setFlipFlip(!getFlipFlop()); }
+    public void flipGameDisable() { setGameDisable(!getGameDisable()); }
 }

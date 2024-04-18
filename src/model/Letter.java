@@ -4,11 +4,10 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Letter {
-    private final SimpleStringProperty letterString = new SimpleStringProperty(); //bind to input textproperty
+    private final SimpleStringProperty letterString = new SimpleStringProperty();
     private final SimpleStringProperty color = new SimpleStringProperty();
-    private final SimpleBooleanProperty letterDisable = new SimpleBooleanProperty(); //bind to input disableproperty
+    private final SimpleBooleanProperty letterDisable = new SimpleBooleanProperty();
     
-
     public Letter(String letterString){
         this.letterString.set(letterString);
         letterDisable.set(true);
@@ -21,9 +20,7 @@ public class Letter {
         resetColors();
     }
 
-    public void resetColors(){
-        color.set("rgb(0, 4, 23)");
-    }
+    public void resetColors() { color.set("rgb(0, 4, 23)"); }
 
     public String getLetterString()   { return letterString.get(); }
     public String getColor()          { return color.get(); }
@@ -37,8 +34,6 @@ public class Letter {
     public void setColor(String color)                  { this.color.set(color); }
     public void setLetterDisable(Boolean letterDisable) { this.letterDisable.set(letterDisable); }
 
-    public void flipLetterDisable(){
-        setLetterDisable(!getLetterDisable());
-    }
+    public void flipLetterDisable() { setLetterDisable(!getLetterDisable()); }
 }
 

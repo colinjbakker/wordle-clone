@@ -14,17 +14,13 @@ public class Guess {
     public Guess(){
         guessString.set("");
         disableProperty.set(true);
-        for(int i = 0; i < 5; i++){
-            letterArray.add(new Letter(" "));
-        }
+        for(int i = 0; i < 5; i++) letterArray.add(new Letter(" "));
     }
 
     public void reset(){
-        for(Letter i : letterArray){
-            i.reset();
-        }
         guessString.set("");
         disableProperty.set(true);
+        for(Letter i : letterArray) i.reset(); 
     }
 
     public ArrayList<Letter> getLetterArray() { return letterArray; }
@@ -37,21 +33,14 @@ public class Guess {
     public void setGuessString(String guessString)          { this.guessString.set(guessString); }
     public void setDisableProperty(Boolean disableProperty) { this.disableProperty.set(disableProperty); }
 
-    public void flipDisable(){
-        setDisableProperty(!getDisable());
-    }
+    public void flipDisable() { setDisableProperty(!getDisable()); }
 
-    public Letter letterAt(int index){
-        return letterArray.get(index);
-    }
+    public Letter letterAt(int index) { return letterArray.get(index); }
 
     public void createLetterArray(){
         //returns a string of all the letters concatenated
-        for(int i = 0; i < guessString.get().length(); i++){
-            letterArray.get(i).setLetterString(guessString.get().substring(i, i+1));
-        }
-        for(int j = guessString.get().length(); j < 5; j++){
-            letterArray.get(j).setLetterString(" ");
-        }
+        int len = guessString.get().length();
+        for(int i = 0; i < len; i++) letterArray.get(i).setLetterString(guessString.get().substring(i, i+1));
+        for(int j = len; j < 5; j++) letterArray.get(j).setLetterString(" ");
     } 
 }

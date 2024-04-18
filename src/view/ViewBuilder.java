@@ -14,9 +14,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -55,15 +52,14 @@ public class ViewBuilder{
         stackPane.getChildren().addAll(createGamePane(), createStatsPane());
         return stackPane;
     }
-
-    // private Node createStartPane(){
-    //     BorderPane borderPane = new BorderPane();
-    //     //borderPane.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
-    //     borderPane.setTop(headingLabel("WORDLE"));
-    //     borderPane.setCenter(createResetButton("START"));
-    //     borderPane.visibleProperty().bind(model.getStartVisibilityProperty());
-    //     return borderPane;
-    // }
+    private Node createGamePane(){
+        BorderPane borderPane = new BorderPane();
+        borderPane.setStyle("-fx-background-color: " + backgroundColor + ";");
+        borderPane.setTop(createTop());
+        borderPane.setCenter(createCenter());
+        borderPane.setBottom(createBottom());
+        return borderPane;
+    }
 
     private Node createResetButton(String content){
         Button reset = new Button(content);
@@ -72,96 +68,33 @@ public class ViewBuilder{
         return reset;
     }
 
-    private Node createGamePane(){
-        BorderPane borderPane = new BorderPane();
-        borderPane.setStyle("-fx-background-color: " + backgroundColor + ";");
-        HBox wordleHeader = (HBox)headingLabel("WORDLE");
-        wordleHeader.setOpacity(0.65);
-        model.getStatsVisibilityProperty().addListener((obs, oldVal, newVal) -> {
-            if(model.getStatsVisibility()){
-                wordleHeader.setOpacity(0.65);
-            } else{
-                wordleHeader.setOpacity(1);
-            }
-        });
-        borderPane.setTop(wordleHeader);
-        borderPane.setCenter(createCenter());
-        borderPane.setBottom(createBottom());
-        //borderPane.visibleProperty().bind(model.getGameVisibilityProperty());
-        return borderPane;
+    private Label headingLabel(String content){
+        Label label = new Label(content);
+        label.setStyle( "-fx-padding: 15;"+ "-fx-text-fill: white;"+"-fx-font-family: serif;"+"-fx-font-size: 50.0;" + "-fx-font-weight: bold;");
+        return label;
     }
 
-    //----------------TOP------------------
-    private Node headingLabel(String content){
-        HBox hbox = new HBox();
-        Label label = new Label(content);
-        label.setStyle("-fx-text-fill: white;"+"-fx-font-family: serif;"+"-fx-font-size: 50.0;" + "-fx-font-weight: bold;");
-        hbox.getChildren().add(label);
-        hbox.setAlignment(Pos.CENTER);
-        hbox.setPadding(new Insets(15));
-        return hbox;
+    //---------------TOP-------------------
+    private Node createTop(){
+        Label wordleHeader = headingLabel("WORDLE");
+        //make header less opaque when stats pane is visible
+        wordleHeader.setOpacity(0.65);
+        model.getStatsVisibilityProperty().addListener((var1, var2, var3) -> { wordleHeader.setOpacity(model.getStatsVisibility() ? 0.65 : 1); });
+        VBox vbox = new VBox(wordleHeader);
+        vbox.setAlignment(Pos.CENTER);
+        return vbox;
     }
 
     //--------------CENTER-----------------
-    private Node createCenter(){
-        Node input = createInput();
-        Node overlay = createOverlay();
-        Node warnings = createWarnings();
-        StackPane stackPane = new StackPane();
-        StackPane.setAlignment(input, Pos.CENTER);
-        StackPane.setAlignment(overlay, Pos.CENTER);
-        StackPane.setAlignment(warnings, Pos.TOP_CENTER);
-        stackPane.getChildren().addAll(input, overlay, warnings);
-        return stackPane;
-    }
+    private Node createCenter() { return new StackPane(createInput(), createOverlay(), createWarnings()); }
 
     private Node createInput(){
         VBox vbox = new VBox(6);
         for(int i = 0; i < 6; i++){
             vbox.getChildren().add(createTextField(model.getShadow().guessAt(i).getGuessStringProperty(), model.getShadow().guessAt(i).getDisableProperty()));
         }
+        vbox.setAlignment(Pos.CENTER);
         return vbox;
-    }
-
-    private Node createTextField(StringProperty stringProperty, BooleanProperty disableProperty){
-        TextField textField = new TextField();
-        stringProperty.addListener((obs, newVal, oldVal) -> {
-            textField.end();
-        });
-        textField.textProperty().bindBidirectional(stringProperty);
-        textField.disableProperty().bind(disableProperty);
-        textField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue){
-                if(!disableProperty.get()){
-                    textField.requestFocus();
-                    
-                }
-            }
-        });
-        // disableProperty.addListener((obs, oldVal, newVal) -> {
-        //     if(!disableProperty.get()){
-        //         System.out.println("request focus 2");
-        //         textField.requestFocus();
-        //     }
-        // });
-        UnaryOperator<TextFormatter.Change> filter = change -> {
-            String text = change.getControlNewText();
-            //[a-zA-Z]* 0 or more letters between a and z
-            if(text.length() <= 5 && text.matches("[a-zA-Z]*")){
-                
-                return change;
-            }
-            return null;
-        };
-        TextFormatter<String> tf = new TextFormatter<>(filter);
-        textField.setTextFormatter(tf);
-        textField.textProperty().addListener((obs, oldVal, newVal) ->  {
-            textField.setText(textField.getText().toUpperCase());
-            changeHandler.run();
-        });
-
-        return textField;
     }
 
     private Node createOverlay(){
@@ -172,79 +105,126 @@ public class ViewBuilder{
             hboxArray[i] = new HBox(8);
             hboxArray[i].setAlignment(Pos.CENTER);
             for(int j = 0; j < 5; j++){
-                Label label = (Label)createLabel(model.getShadow().guessAt(i).letterAt(j).getLetterStringProperty(), model.getShadow().guessAt(i).getDisableProperty(), model.getShadow().guessAt(i).letterAt(j).getColorProperty());
+                Label label = createLetterLabel(model.getShadow().guessAt(i).letterAt(j).getLetterStringProperty(), model.getShadow().guessAt(i).getDisableProperty(), model.getShadow().guessAt(i).letterAt(j).getColorProperty(), j);
                 if(i == 0){
                     label.setBorder(new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
                 }
                 hboxArray[i].getChildren().add(label);
             }
         }
+        vbox.setAlignment(Pos.TOP_CENTER);
         vbox.getChildren().addAll(hboxArray);            
         return vbox;
     }
 
-    private Node createLabel(StringProperty stringProperty, BooleanProperty disableProperty, StringProperty colorProperty){
+    private Node createTextField(StringProperty stringProperty, BooleanProperty disableProperty){
+        TextField textField = new TextField();
+        stringProperty.addListener((var1, var2, var3) -> {
+            textField.end();
+        });
+
+        textField.textProperty().bindBidirectional(stringProperty);
+        textField.disableProperty().bind(disableProperty);
+        textField.focusedProperty().addListener((var1, var2, var3) -> {
+            if(!disableProperty.get()){
+                textField.requestFocus();
+            }
+        });
+
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String text = change.getControlNewText();
+            //[a-zA-Z]* 0 or more letters between a and z
+            if(text.length() <= 5 && text.matches("[a-zA-Z]*")){
+                return change;
+            }
+            return null;
+        };
+        TextFormatter<String> tf = new TextFormatter<>(filter);
+        textField.setTextFormatter(tf);
+        textField.textProperty().addListener((var1, var2, var3) ->  {
+            textField.setText(textField.getText().toUpperCase());
+            changeHandler.run();
+        });
+
+        return textField;
+    }
+
+    
+
+    private Label createLetterLabel(StringProperty stringProperty, BooleanProperty disableProperty, StringProperty colorProperty, int index){
         Label label = new Label();
         label.textProperty().bind(stringProperty);
         label.setPrefSize(80, 80);
         label.setAlignment(Pos.CENTER);
-        label.setOpacity(0.65);
-        String style = "-fx-text-fill: white;" + "-fx-font-family: serif;"+"-fx-font-size: 35.0;" + "-fx-font-weight: bold;";
+        
+        String style ="-fx-text-fill: white;" + "-fx-font-family: serif;"+"-fx-font-size: 35.0;" + "-fx-font-weight: bold;";
         label.setStyle(style);
-        label.setBorder(new Border(new BorderStroke(Color.rgb(65, 65, 65), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4))));
-
+        
         //label.styleProperty().bind(Bindings.when(disableProperty).then(style + "-fx-border-color: rgb(65, 65, 65);").otherwise(style + "-fx-border-color: white;"));
 
-        disableProperty.addListener((obs, oldVal, newVal) -> {
-            if(disableProperty.get()){
-                label.setBorder(new Border(new BorderStroke(Color.rgb(65, 65, 65), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4))));
-            } else{
-                label.setBorder(new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4))));
+        //highlight current input line
+        label.setBorder(new Border(new BorderStroke(Color.rgb(65, 65, 65), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4))));
+        disableProperty.addListener((var1, var2, var3) -> { label.setBorder(new Border(new BorderStroke(disableProperty.get() ? Color.rgb(65, 65, 65) : Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4)))); });
+
+        //make less opaque when stats pane visible
+        label.setOpacity(0.65);
+        model.getStatsVisibilityProperty().addListener((var1, var2, var3) -> { label.setOpacity(model.getStatsVisibility() ? 0.65 : 1); });
+
+
+        //flip and change color when color changes
+        Timeline flipTL = new Timeline();
+        flipTL.getKeyFrames().add(new KeyFrame(Duration.millis(120), new KeyValue(label.scaleYProperty(), 0)));
+        flipTL.getKeyFrames().add(new KeyFrame(Duration.millis(120), (e) -> label.setStyle(style + "-fx-background-color: " + colorProperty.get() + ";")));
+        flipTL.getKeyFrames().add(new KeyFrame(Duration.millis(240), new KeyValue(label.scaleYProperty(), 1)));
+        flipTL.setDelay(Duration.millis(index * 120));
+        colorProperty.addListener((var1, var2, var3) -> { 
+            if(colorProperty.get().equals(backgroundColor)){
+                label.setStyle(style + "-fx-background-color: " + colorProperty.get() + ";");
+            } else {
+                flipTL.play(); 
             }
         });
 
-        model.getStatsVisibilityProperty().addListener((obs, oldVal, newVal) -> {
-            if(model.getStatsVisibility()){
-                label.setOpacity(0.65);
-            } else{
-                label.setOpacity(1);
-            }
+        //make letter label "bump" when you type a letter
+        Timeline bumpTL = new Timeline();
+        bumpTL.getKeyFrames().add(new KeyFrame(Duration.millis(50), new KeyValue(label.scaleYProperty(), 1.12)));
+        bumpTL.getKeyFrames().add(new KeyFrame(Duration.millis(50), new KeyValue(label.scaleXProperty(), 1.12)));
+        bumpTL.setAutoReverse(true);
+        bumpTL.setCycleCount(2);
+        label.textProperty().addListener((var1, var2, var3) -> {
+            if(var3 != " " && var3 != "")
+                bumpTL.play();
         });
 
-        Timeline tl = new Timeline();
-        tl.getKeyFrames().add(new KeyFrame(Duration.millis(200), new KeyValue(label.scaleYProperty(), 0)));
-        tl.getKeyFrames().add(new KeyFrame(Duration.millis(200), (e) -> label.setStyle(style + "-fx-background-color: " + colorProperty.get() + ";")));
-        tl.getKeyFrames().add(new KeyFrame(Duration.millis(400), new KeyValue(label.scaleYProperty(), 1)));
-
-        colorProperty.addListener((obs, oldVal, newVal) -> {
-            tl.play();
-        });
         return label;
     }
 
     private Node createWarnings(){
         Label warning = new Label();
-        warning.setOpacity(0);
-        warning.setTranslateY(-15);
+        warning.setTranslateY(-270);
         warning.textProperty().bindBidirectional(model.getWarningProperty());
 
+        //fade in and out animation
+        warning.setOpacity(0);
         Timeline tl = new Timeline();
-        tl.getKeyFrames().add(new KeyFrame(Duration.ZERO, (e) -> {warning.setOpacity(0.95);}));
-        tl.getKeyFrames().add(new KeyFrame(Duration.millis(1500)));
+        tl.getKeyFrames().add(new KeyFrame(Duration.millis(100), new KeyValue(warning.opacityProperty(), 0.95)));
+        tl.getKeyFrames().add(new KeyFrame(Duration.millis(1000), new KeyValue(warning.opacityProperty(), 0.95)));
+        tl.getKeyFrames().add(new KeyFrame(Duration.millis(1500), new KeyValue(warning.opacityProperty(), 0)));
 
-        tl.onFinishedProperty().set((ActionEvent e) -> {
-            warning.setOpacity(0);
-            warning.setText("");
-        });
-        warning.textProperty().addListener((obs, oldVal, newVal) ->{
+        //submit valid answer before warning disappeares
+        warning.textProperty().addListener((var1, var2, var3) ->{
             if(warning.getText() == ""){
+                tl.stop();
                 warning.setOpacity(0);
             }
         });
-        model.getFlipFlopProperty().addListener((obs, oldVal, newVal) -> {
+
+        //sometimes same warning twice in a row, so flip flop triggers warning animation not text property
+        model.getFlipFlopProperty().addListener((var1, var2, var3) -> {
             tl.stop();
             tl.play();
         });
+
         warning.setStyle("-fx-font-family: serif;" + "-fx-font-size: 20.0;" + "-fx-font-weight: bold;" +  "-fx-background-radius: 2;" + "-fx-text-fill: black;" + "-fx-background-color: white;");
         warning.setPadding(new Insets(7, 10, 7, 10));
         return warning;
@@ -280,7 +260,7 @@ public class ViewBuilder{
             String style = "-fx-text-fill: white;" + "-fx-font-family: serif;"+"-fx-background-insets: 0;"+"-fx-font-size: 14.0;" + "-fx-font-weight: bold;" + "-fx-border-style: solid;" + "-fx-border-width: 3;"+ "-fx-border-color: rgb(65, 65, 65);";
             button.setStyle(style + "-fx-background-color: rgb(0,4,23);");
             SimpleStringProperty colorProp = model.getShadow().keyAt(i).getColorProperty();
-            colorProp.addListener((obs, newVal, oldVal) -> {
+            colorProp.addListener((var1, var2, var3) -> {
                 button.setStyle(style + "-fx-background-color: " + colorProp.get() + ";");
             });
             
@@ -328,10 +308,12 @@ public class ViewBuilder{
         tl.getKeyFrames().add(new KeyFrame(Duration.millis(400), new KeyValue(statsPane.translateYProperty(), 0)));
         tl.getKeyFrames().add(new KeyFrame(Duration.millis(400), new KeyValue(statsPane.opacityProperty(), 1)));
 
-        model.getStatsVisibilityProperty().addListener((obs, oldVal, newVal) -> {
+        tl.setOnFinished((e) -> {statsPane.setDisable(false);});
+
+        model.getStatsVisibilityProperty().addListener((var1, var2, var3) -> {
             statsPane.setVisible(model.getStatsVisibility());
             if(model.getStatsVisibility()){
-                System.out.println("playing animation");
+                statsPane.setDisable(true);
                 tl.play();
             } else{
                 statsPane.setTranslateY(300);
@@ -420,7 +402,6 @@ public class ViewBuilder{
         label.setWrapText(true);
         return label;
     }
-
     private Node statLabel(SimpleIntegerProperty boundProperty){
         Label label = new Label();
         label.textProperty().bind(boundProperty.asString());

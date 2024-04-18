@@ -20,7 +20,6 @@ abaya
 abbas
 abbed
 abbes
-abbey
 abbot
 abcee
 abeam
@@ -51,7 +50,6 @@ aboma
 aboon
 abord
 abore
-aborn
 abort
 about
 above
@@ -274,7 +272,6 @@ ahold
 ahole
 ahull
 ahuru
-aidas
 aided
 aider
 aides
@@ -791,7 +788,6 @@ avert
 avgas
 avian
 avine
-avion
 avise
 aviso
 avize
@@ -1106,7 +1102,6 @@ begem
 beget
 begin
 begob
-begot
 begum
 begun
 beige
@@ -1116,7 +1111,6 @@ beins
 beira
 beisa
 bekah
-belah
 belar
 belay
 belch
@@ -1372,7 +1366,6 @@ blist
 blite
 blits
 blitz
-blive
 bloat
 blobs
 block
@@ -1598,7 +1591,6 @@ boyed
 boyey
 boyfs
 boygs
-boyla
 boyly
 boyos
 boysy
@@ -2247,7 +2239,6 @@ ciels
 cigar
 ciggy
 cilia
-cills
 cimar
 cimex
 cinch
@@ -2520,7 +2511,6 @@ copra
 copse
 copsy
 coqui
-coral
 coram
 corbe
 corby
@@ -2562,7 +2552,6 @@ cotts
 couch
 coude
 cough
-could
 count
 coupe
 coups
@@ -2592,7 +2581,6 @@ coxae
 coxal
 coxed
 coxes
-coxib
 coyau
 coyed
 coyer
@@ -2627,7 +2615,6 @@ crate
 crave
 crawl
 craws
-crays
 craze
 crazy
 creak
@@ -2682,7 +2669,6 @@ crogs
 cromb
 crome
 crone
-cronk
 crony
 crook
 crool
@@ -2773,7 +2759,6 @@ cures
 curet
 curfs
 curia
-curie
 curio
 curli
 curls
@@ -2962,7 +2947,6 @@ decan
 decay
 decim
 decko
-decks
 decor
 decos
 decoy
@@ -3139,7 +3123,6 @@ dimps
 dinar
 dined
 diner
-dines
 dinge
 dingo
 dings
@@ -3424,7 +3407,6 @@ drone
 drony
 droob
 droog
-drook
 drool
 droop
 drops
@@ -3735,7 +3717,6 @@ enorm
 enows
 enrol
 ensew
-ensky
 ensue
 enter
 entia
@@ -3776,7 +3757,6 @@ ergon
 ergos
 ergot
 erhus
-erica
 erick
 erics
 ering
@@ -3791,7 +3771,6 @@ eruct
 erugo
 erupt
 eruvs
-erven
 ervil
 escar
 escot
@@ -4128,7 +4107,6 @@ filer
 files
 filet
 filii
-filks
 fille
 fillo
 fills
@@ -4229,7 +4207,6 @@ flews
 flexi
 flexo
 fleys
-flick
 flics
 flied
 flier
@@ -4250,7 +4227,6 @@ flock
 flocs
 floes
 flogs
-flong
 flood
 floor
 flops
@@ -5018,7 +4994,6 @@ grasp
 grass
 grata
 grate
-grats
 grave
 gravs
 gravy
@@ -5277,7 +5252,6 @@ halve
 halwa
 hamal
 hamba
-hamed
 hamel
 hames
 hammy
@@ -5484,7 +5458,6 @@ hills
 hilly
 hilsa
 hilts
-hilum
 hilus
 himbo
 hinau
@@ -5835,7 +5808,6 @@ incut
 indew
 index
 india
-indie
 indol
 indow
 indri
@@ -5914,7 +5886,6 @@ ixias
 ixnay
 ixora
 ixtle
-izard
 izars
 izzat
 jaaps
@@ -6581,7 +6552,6 @@ lacey
 lacis
 lacka
 lacks
-lacky
 laddu
 laddy
 laded
@@ -6648,7 +6618,6 @@ lappa
 lappy
 lapse
 larch
-lards
 lardy
 laree
 lares
@@ -7352,7 +7321,6 @@ mards
 mardy
 mares
 marga
-marge
 margo
 margs
 maria
@@ -7422,7 +7390,6 @@ mausy
 mauts
 mauve
 mauvy
-mauzy
 maven
 mavie
 mavin
@@ -7529,7 +7496,6 @@ mence
 mends
 mened
 menes
-menge
 mengs
 menil
 mensa
@@ -7606,7 +7572,6 @@ mezzo
 mgals
 mhorr
 miais
-miaou
 miaow
 miasm
 miaul
@@ -7680,7 +7645,6 @@ mines
 minge
 mingi
 mings
-mingy
 minim
 minis
 minke
@@ -8035,7 +7999,6 @@ mulsh
 mumbo
 mumms
 mummy
-mumph
 mumps
 mumsy
 mumus
@@ -8423,7 +8386,6 @@ nitry
 nitta
 nitto
 nitty
-nival
 nivas
 nivel
 nixed
@@ -8550,7 +8512,6 @@ nrtya
 nsima
 nubby
 nubia
-nucha
 nucin
 nuddy
 nuder
@@ -8639,7 +8600,6 @@ oches
 ochre
 ochry
 ocker
-ocote
 ocrea
 octad
 octal
@@ -8664,7 +8624,6 @@ odors
 odour
 odums
 odyle
-odyls
 ofays
 offal
 offed
@@ -9089,7 +9048,6 @@ parks
 parky
 parle
 parly
-parma
 parmo
 parms
 parol
@@ -9862,7 +9820,6 @@ pring
 prink
 print
 prion
-prior
 prise
 prism
 priss
@@ -10249,7 +10206,6 @@ rakia
 rakis
 rakki
 raksi
-rakus
 rales
 ralli
 rally
@@ -10453,7 +10409,6 @@ refed
 refel
 refer
 reffo
-refis
 refit
 refix
 refly
@@ -10535,7 +10490,6 @@ repin
 repla
 reply
 repos
-repot
 repps
 repro
 repun
@@ -10773,11 +10727,9 @@ ronts
 ronuk
 roods
 roofs
-roofy
 rooks
 rooky
 rooms
-roomy
 roons
 roops
 roopy
@@ -11327,7 +11279,6 @@ selfy
 selky
 sella
 selle
-sells
 selva
 semas
 semee
@@ -11465,7 +11416,6 @@ sheik
 shelf
 shell
 shend
-sheng
 shent
 sheol
 sherd
@@ -11668,7 +11618,6 @@ sixth
 sixty
 sizar
 sized
-sizel
 sizer
 sizes
 skags
@@ -11764,7 +11713,6 @@ slaid
 slain
 slake
 slams
-slane
 slang
 slank
 slant
@@ -11845,7 +11793,6 @@ slyly
 slype
 smaak
 smack
-smaik
 small
 smalm
 smalt
@@ -12160,7 +12107,6 @@ spews
 spewy
 spial
 spica
-spice
 spick
 spics
 spicy
@@ -12169,7 +12115,6 @@ spied
 spiel
 spier
 spies
-spiff
 spifs
 spike
 spiks
@@ -12247,7 +12192,6 @@ squat
 squaw
 squee
 squeg
-squib
 squid
 squit
 squiz
@@ -12439,7 +12383,6 @@ style
 styli
 stylo
 styme
-stymy
 styre
 styte
 suave
@@ -12537,7 +12480,6 @@ swaly
 swami
 swamp
 swamy
-swang
 swank
 swans
 swaps
@@ -13277,7 +13219,6 @@ trape
 trapo
 traps
 trapt
-trash
 trass
 trats
 tratt
@@ -13303,7 +13244,6 @@ trets
 trews
 treyf
 treys
-triac
 triad
 trial
 tribe
@@ -13515,7 +13455,6 @@ ubity
 udals
 udder
 udons
-udyog
 ugali
 ugged
 uhlan
@@ -13537,7 +13476,6 @@ ulvas
 ulyie
 ulzie
 umami
-umbel
 umber
 umble
 umbos
@@ -13909,7 +13847,6 @@ viper
 viral
 vired
 vireo
-vires
 virga
 virge
 virgo
@@ -14016,7 +13953,6 @@ wacko
 wacks
 wacky
 wadas
-wadds
 waddy
 waded
 wader
@@ -14209,7 +14145,6 @@ wheel
 wheen
 wheep
 wheft
-whelk
 whelm
 whelp
 whens
@@ -14288,7 +14223,6 @@ wilis
 wilja
 wills
 willy
-wilts
 wimps
 wimpy
 wince
@@ -14605,7 +14539,6 @@ yokel
 yoker
 yokes
 yokul
-yolks
 yolky
 yolps
 yomim
@@ -14688,7 +14621,6 @@ zarfs
 zaris
 zatis
 zawns
-zaxes
 zayde
 zayin
 zazen
