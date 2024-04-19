@@ -38,13 +38,15 @@ public class ViewBuilder{
     private final Runnable submitHandler;
     private final Runnable changeHandler;
     private final Runnable newGame;
+    private final Runnable loadGame;
     private final String backgroundColor = "rgb(0, 4, 23)";
 
-    public ViewBuilder(Model model, Runnable submitHandler, Runnable changeHandler, Runnable newGame){
+    public ViewBuilder(Model model, Runnable submitHandler, Runnable changeHandler, Runnable newGame, Runnable loadGame){
         this.model = model;
         this.submitHandler = submitHandler;
         this.changeHandler = changeHandler;
         this.newGame = newGame;
+        this.loadGame = loadGame;
     }
 
     public Region build(){
@@ -61,9 +63,9 @@ public class ViewBuilder{
         return borderPane;
     }
 
-    private Node createResetButton(String content){
+    private Node createButton(String content, Runnable runnable){
         Button reset = new Button(content);
-        reset.setOnAction(e -> newGame.run());
+        reset.setOnAction(e -> runnable.run());
         reset.setStyle("-fx-font-family: serif;" +"-fx-font-size: 16.0;" + "-fx-font-weight: bold;" + "-fx-border-style: solid;" + "-fx-border-width: 3;"+"-fx-border-color: rgb(65, 65, 65);"+"-fx-text-fill: white;" + "-fx-background-color: "+backgroundColor+";");
         return reset;
     }
@@ -107,7 +109,7 @@ public class ViewBuilder{
             for(int j = 0; j < 5; j++){
                 Label label = createLetterLabel(model.getShadow().guessAt(i).letterAt(j).getLetterStringProperty(), model.getShadow().guessAt(i).getDisableProperty(), model.getShadow().guessAt(i).letterAt(j).getColorProperty(), j);
                 if(i == 0){
-                    label.setBorder(new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
+                    //label.setBorder(new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
                 }
                 hboxArray[i].getChildren().add(label);
             }
@@ -164,7 +166,7 @@ public class ViewBuilder{
 
         //highlight current input line
         label.setBorder(new Border(new BorderStroke(Color.rgb(65, 65, 65), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4))));
-        disableProperty.addListener((var1, var2, var3) -> { label.setBorder(new Border(new BorderStroke(disableProperty.get() ? Color.rgb(65, 65, 65) : Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4)))); });
+        disableProperty.addListener((var1, var2, var3) -> { label.setBorder(new Border(new BorderStroke(disableProperty.get() ? Color.rgb(65, 65, 65) : Color.GREEN, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4)))); });
 
         //make less opaque when stats pane visible
         label.setOpacity(0.65);
@@ -297,10 +299,17 @@ public class ViewBuilder{
 
     private Node createStatsPane(){
         VBox statsPane = new VBox();
-        Button resetButton = (Button)createResetButton("NEW GAME");
+        Button resetButton = (Button)createButton("NEW GAME", newGame);
         resetButton.disableProperty().bind(model.getStatsVisibilityProperty().not());
 
-        statsPane.getChildren().addAll(headingLabel("STATS"), createStatsCenter(), resetButton);
+        Button loadButton = (Button)createButton("LOAD GAME", loadGame);
+        resetButton.disableProperty().bind(model.getStatsVisibilityProperty().not());
+
+        HBox hbox = new HBox(resetButton, loadButton);
+        hbox.setSpacing(6);
+        hbox.setPadding(new Insets(15));
+        hbox.setAlignment(Pos.CENTER);
+        statsPane.getChildren().addAll(headingLabel("STATS"), createStatsCenter(), hbox);
 
         statsPane.setVisible(true);
         
@@ -322,7 +331,7 @@ public class ViewBuilder{
         });
 
         statsPane.setAlignment(Pos.CENTER);
-        statsPane.setMaxHeight(490);
+        statsPane.setMaxHeight(500);
         statsPane.setMaxWidth(380);
         statsPane.setStyle("-fx-background-color: rgb(0, 4, 23, 0.75);");
         statsPane.setEffect(new DropShadow(10.0, 3, 3, Color.rgb(6, 41, 77,0.5)));

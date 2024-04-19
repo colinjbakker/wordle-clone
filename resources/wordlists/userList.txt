@@ -1247,7 +1247,6 @@ biled
 biles
 bilge
 bilgy
-bilks
 bills
 billy
 bimah
@@ -1350,7 +1349,6 @@ blent
 blert
 bless
 blest
-blets
 bleys
 blimp
 blimy
@@ -1754,7 +1752,6 @@ buist
 bukes
 bukos
 bulbs
-bulge
 bulgy
 bulks
 bulky
@@ -2905,7 +2902,6 @@ dawgs
 dawks
 dawns
 dawts
-dayal
 dayan
 daych
 daynt
@@ -3157,7 +3153,6 @@ disks
 disme
 dital
 ditas
-ditch
 dited
 dites
 ditsy
@@ -4206,7 +4201,6 @@ fleur
 flews
 flexi
 flexo
-fleys
 flics
 flied
 flier
@@ -4913,7 +4907,6 @@ goody
 gooey
 goofs
 goofy
-googs
 gooks
 gooky
 goold
@@ -6037,7 +6030,6 @@ joint
 joist
 joked
 joker
-jokes
 jokey
 jokol
 joled
@@ -7114,7 +7106,6 @@ lurgy
 lurid
 lurry
 lurve
-luser
 lushy
 lusks
 lusts
@@ -7442,7 +7433,6 @@ meany
 meare
 mease
 meath
-meats
 meaty
 mebbe
 mebos
@@ -7643,7 +7633,6 @@ mined
 miner
 mines
 minge
-mingi
 mings
 minim
 minis
@@ -7719,7 +7708,6 @@ mmkay
 mneme
 moais
 moaky
-moals
 moana
 moans
 moany
@@ -11125,7 +11113,6 @@ scams
 scand
 scans
 scant
-scapa
 scape
 scapi
 scare
@@ -11474,7 +11461,6 @@ shool
 shoon
 shoos
 shoot
-shope
 shops
 shore
 shorl
@@ -11978,7 +11964,6 @@ sooth
 soots
 sooty
 sophs
-sophy
 sopor
 soppy
 sopra
@@ -13842,7 +13827,6 @@ vints
 vinyl
 viola
 viold
-viols
 viper
 viral
 vired
@@ -13858,7 +13842,6 @@ visas
 vised
 vises
 visie
-visit
 visna
 visne
 vison
@@ -14188,7 +14171,6 @@ whore
 whorl
 whort
 whose
-whoso
 whows
 whump
 whups

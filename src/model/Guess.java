@@ -38,7 +38,6 @@ public class Guess {
     public Letter letterAt(int index) { return letterArray.get(index); }
 
     public void createLetterArray(){
-        //returns a string of all the letters concatenated
         int len = guessString.get().length();
         for(int i = 0; i < len; i++) letterArray.get(i).setLetterString(guessString.get().substring(i, i+1));
         for(int j = len; j < 5; j++) letterArray.get(j).setLetterString(" ");

@@ -11,6 +11,7 @@ public class App extends Application {
     public void start(Stage primaryStage) {
 		Controller controller = new Controller();
 		controller.prepWordFile("resources/wordlists/userList.txt", "resources/wordlists/completeList.txt");
+		controller.loadStats();
 		Scene scene = new Scene(controller.getView());
 		primaryStage.setScene(scene);
 		primaryStage.setMinHeight(826);

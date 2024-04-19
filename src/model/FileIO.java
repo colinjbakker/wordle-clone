@@ -13,10 +13,12 @@ public class FileIO{
     private ArrayList<String> userWordList = new ArrayList<String>();
 	private ArrayList<String> completeWordList = new ArrayList<String>();
 	private ArrayList<String> gameLogList = new ArrayList<String>();
+	private ArrayList<Integer> statsList = new ArrayList<Integer>();
 
 	public ArrayList<String> getUserWordList() 	   { return userWordList; }
 	public ArrayList<String> getCompleteWordList() { return completeWordList; }
 	public ArrayList<String> getGameLogList()	   { return gameLogList; }
+	public ArrayList<Integer> getStatsList()	   { return statsList; }
 	
     public void scanFile(String userList, String completeList){
 		//read user list
@@ -42,23 +44,55 @@ public class FileIO{
 		infile.close( );
     }
 
-	public void loadSave(){
+	public void loadSave(String fileName){
 		//file will contain a list of words that the user inputted + solution, other info will be derived from this
 		try {
-		    infile = new Scanner(new FileReader("resources/userData/gameLog.txt"));
+		    infile = new Scanner(new FileReader(fileName));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			System.exit(0);
 		}
+		gameLogList.clear();
 		while(infile.hasNextLine()) gameLogList.add(infile.nextLine());
 		infile.close( );
 	}
 
-	public void writeToLog(String stringToWrite){
+	public void loadStats(String fileName){
+		//file will contain a list of words that the user inputted + solution, other info will be derived from this
+		try {
+		    infile = new Scanner(new FileReader(fileName));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+
+		gameLogList.clear();
+		while(infile.hasNextInt()){
+			statsList.add(infile.nextInt());
+		} 
+		infile.close( );
+	}
+
+	public void writeWordToFile(String stringToWrite, String fileName, boolean underwrite){
 		try{
-			FileWriter fo = new FileWriter("resources/userData/gameLog.txt", true);
-			for(String str: userWordList){
-				fo.write(str + "\n");
+			FileWriter fo = new FileWriter(fileName, underwrite);
+			fo.write(stringToWrite.toUpperCase() + "\n");
+			fo.close();
+		} catch(IOException e){
+			e.printStackTrace();
+			System.exit(0);
+		}
+	}
+
+	public void writeStats(String fileName, Stats stats){
+		try{
+			FileWriter fo = new FileWriter(fileName, false);
+			fo.write(stats.getWinCount() + "\n");
+			fo.write(stats.getGameCount() + "\n");
+			fo.write(stats.getMaxStreak() + "\n");
+			fo.write(stats.getCurrentStreak() + "\n");
+			for(int i = 0; i < 6; i++){
+				fo.write(stats.winCountArrayAt(i) + "\n");
 			}
 			fo.close();
 		} catch(IOException e){

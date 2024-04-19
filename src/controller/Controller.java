@@ -3,6 +3,8 @@ package controller;
 import view.ViewBuilder;
 import model.*;
 
+import java.util.ArrayList;
+
 import javafx.scene.layout.Region;
 
 
@@ -14,7 +16,7 @@ public class Controller{
 	public Controller() {
 		this.model = new Model();
         this.fileIO = new FileIO();
-		viewBuilder = new ViewBuilder(model, this::submitGuess, this::changeHandler, this::newGame);
+		viewBuilder = new ViewBuilder(model, this::submitGuess, this::changeHandler, this::newGame, this::loadGame);
 	}
 
     public void prepWordFile(String userList, String completeList){ fileIO.scanFile(userList, completeList); }
@@ -26,6 +28,45 @@ public class Controller{
         System.out.println(model.getSolution()); //hehe
         model.getShadow().guessAt(0).flipDisable();
         model.setStatsVisibility(false);
+        fileIO.writeWordToFile(model.getSolution(), "resources/userdata/gameLog.txt", false);
+    }
+
+    public void loadGame(){
+        fileIO.loadSave("resources/userdata/gameLog.txt");
+        ArrayList<String> log = fileIO.getGameLogList();
+        if(log.isEmpty() || log.get(0) == ""){
+            model.setWarning("Nothing to load");
+            model.flipFlipFlop();
+        } else{
+            model.reset();
+            model.getShadow().guessAt(0).flipDisable();
+            model.setSolution(log.get(0)); //solution is first word in log
+            for(int i = 0; i < log.size()-1; i++){
+                model.getShadow().guessAt(i).setGuessString(log.get(i+1)); //subsequent words are guesses
+                model.getShadow().guessAt(i).createLetterArray();
+                setBoardFlags();
+                model.getShadow().guessAt(i).flipDisable();
+                model.getShadow().guessAt(i+1).flipDisable();
+                model.setGuessCount(i+1);
+            }
+            
+            System.out.println(model.getSolution()); //hehe
+            model.setStatsVisibility(false);
+        }
+    }
+
+    public void loadStats(){
+        fileIO.loadStats("resources/userdata/playerStats.txt");
+        ArrayList<Integer> stats = fileIO.getStatsList();
+        model.getStats().setWinCount(stats.get(0));
+        model.getStats().setGameCount(stats.get(1));
+        model.getStats().setMaxStreak(stats.get(2));
+        model.getStats().setCurrentStreak(stats.get(3));
+        for(int i = 0; i < 6; i++){
+            model.getStats().setWinCountArray(i, stats.get(i+4));
+        }
+        model.getStats().setWinPercent(model.getStats().getGameCount() == 0 ? "0%" : (100 * model.getStats().getWinCount()) / (model.getStats().getGameCount()) + "%"); 
+        model.getStats().updateWinArray();
     }
 
     private boolean checkWin(String guess){ return guess.equals(model.getSolution().toUpperCase()); }
@@ -64,12 +105,15 @@ public class Controller{
                 model.getShadow().guessAt(gc).flipDisable();
                 updateStats(checkWin(guess));
                 fileIO.updateList("resources/wordlists/userList.txt");
+                fileIO.writeWordToFile("","resources/userdata/gameLog.txt", false);
+                fileIO.writeStats("resources/userdata/playerStats.txt", model.getStats());
             }
             else{
                 setBoardFlags();
                 model.getShadow().guessAt(model.getGuessCount()).flipDisable();
                 model.getShadow().guessAt(model.getGuessCount()+1).flipDisable();
                 model.setGuessCount(gc + 1);
+                fileIO.writeWordToFile(guess, "resources/userdata/gameLog.txt", true);
             }
         }
     }
