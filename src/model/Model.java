@@ -16,6 +16,7 @@ public class Model {
     private final SimpleBooleanProperty gameDisable = new SimpleBooleanProperty();
     private final SimpleBooleanProperty flipFlop = new SimpleBooleanProperty();
     private final SimpleBooleanProperty statsVisibility = new SimpleBooleanProperty();
+    private final SimpleBooleanProperty hardMode = new SimpleBooleanProperty();
     private final Shadow guessList = new Shadow();
     private final Stats stats = new Stats();
 
@@ -27,6 +28,7 @@ public class Model {
         gameDisable.set(true);
         flipFlop.set(false);
         statsVisibility.set(true);
+        hardMode.set(false);
     }
 
     public void reset(){
@@ -36,6 +38,7 @@ public class Model {
         gameDisable.set(false);
         inputCount.set(0);
         guessList.reset();
+        hardMode.set(false);
     }
 
     //Data Getters
@@ -46,6 +49,7 @@ public class Model {
     public Boolean getGameDisable()     { return gameDisable.get(); }
     public Boolean getFlipFlop()        { return flipFlop.get(); }
     public Boolean getStatsVisibility() { return statsVisibility.get(); }
+    public Boolean getHardMode()        { return hardMode.get(); }
     public Shadow getShadow()           { return guessList; }
     public Stats getStats()             { return stats; }
 
@@ -57,6 +61,7 @@ public class Model {
     public SimpleBooleanProperty getGameDisableProperty()     { return gameDisable; }
     public SimpleBooleanProperty getFlipFlopProperty()        { return flipFlop; }
     public SimpleBooleanProperty getStatsVisibilityProperty() { return statsVisibility; }
+    public SimpleBooleanProperty getHardModeProperty()        { return hardMode; }
 
     //Setters
     public void setSolution(String solution)                { this.solution.set(solution); }
@@ -66,7 +71,9 @@ public class Model {
     public void setGameDisable(Boolean gameDisable)         { this.gameDisable.set(gameDisable); }
     public void setFlipFlip(Boolean flipFlop)               { this.flipFlop.set(flipFlop); }
     public void setStatsVisibility(Boolean statsVisibility) { this.statsVisibility.set(statsVisibility); }
+    public void setHardMode(Boolean hardMode)               { this.hardMode.set(hardMode); }
 
     public void flipFlipFlop()    { setFlipFlip(!getFlipFlop()); }
     public void flipGameDisable() { setGameDisable(!getGameDisable()); }
+    public void flipHardMode()    { setHardMode(!getHardMode()); }
 }

@@ -390,7 +390,6 @@ allay
 allee
 allel
 allen
-aller
 alley
 allin
 allis
@@ -439,7 +438,6 @@ amass
 amate
 amaut
 amaze
-amban
 amber
 ambit
 amble
@@ -1654,7 +1652,6 @@ brick
 bride
 brief
 brier
-bries
 brigs
 briki
 briks
@@ -4114,7 +4111,6 @@ filos
 filth
 filum
 final
-finca
 finch
 finds
 fined
@@ -4205,7 +4201,6 @@ flics
 flied
 flier
 flies
-flimp
 flims
 flint
 flips
@@ -5207,7 +5202,6 @@ haick
 haika
 haiks
 haiku
-hails
 haily
 hains
 haint
@@ -5227,7 +5221,6 @@ halal
 haldi
 haled
 haler
-hales
 halfa
 halfs
 halid
@@ -7754,7 +7747,6 @@ mogul
 mohar
 mohel
 mohos
-mohrs
 mohua
 mohur
 moile
@@ -9181,7 +9173,6 @@ pekin
 pekoe
 pelas
 pelau
-pelch
 peles
 pelfs
 pells
@@ -9415,7 +9406,6 @@ pipit
 pippy
 pipul
 pique
-piqui
 pirai
 pirks
 pirls
@@ -10240,7 +10230,6 @@ rapee
 raper
 rapes
 raphe
-rapid
 rapin
 rappe
 rapso
@@ -10363,7 +10352,6 @@ reddy
 reded
 redes
 redia
-redid
 redif
 redig
 redip
@@ -10747,7 +10735,6 @@ rosha
 roshi
 rosin
 rosit
-rosps
 rossa
 rosso
 rosti
@@ -10861,7 +10848,6 @@ rumes
 rumly
 rummy
 rumor
-rumpo
 rumps
 rumpy
 runce
@@ -12546,7 +12532,6 @@ synch
 syncs
 synds
 syned
-synes
 synod
 synth
 syped
@@ -12626,7 +12611,6 @@ tales
 talik
 talks
 talky
-talls
 tally
 talma
 talon
@@ -12718,7 +12702,6 @@ tauld
 taunt
 tauon
 taupe
-tauts
 tauty
 tavah
 tavas
@@ -13374,7 +13357,6 @@ tutti
 tutty
 tutus
 tuxes
-tuyer
 twaes
 twain
 twals
@@ -14571,7 +14553,6 @@ yukes
 yukky
 yukos
 yulan
-yules
 yummo
 yummy
 yumps

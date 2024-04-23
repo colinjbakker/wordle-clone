@@ -10,6 +10,7 @@ import java.util.function.UnaryOperator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -33,20 +34,22 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-public class ViewBuilder{
+public class View{
     private final Model model;
     private final Runnable submitHandler;
     private final Runnable changeHandler;
     private final Runnable newGame;
     private final Runnable loadGame;
+    private final Runnable showHideStats;
     private final String backgroundColor = "rgb(0, 4, 23)";
 
-    public ViewBuilder(Model model, Runnable submitHandler, Runnable changeHandler, Runnable newGame, Runnable loadGame){
+    public View(Model model, Runnable submitHandler, Runnable changeHandler, Runnable newGame, Runnable loadGame, Runnable showHideStats){
         this.model = model;
         this.submitHandler = submitHandler;
         this.changeHandler = changeHandler;
         this.newGame = newGame;
         this.loadGame = loadGame;
+        this.showHideStats = showHideStats;
     }
 
     public Region build(){
@@ -63,7 +66,7 @@ public class ViewBuilder{
         return borderPane;
     }
 
-    private Node createButton(String content, Runnable runnable){
+    private Button createButton(String content, Runnable runnable){
         Button reset = new Button(content);
         reset.setOnAction(e -> runnable.run());
         reset.setStyle("-fx-font-family: serif;" +"-fx-font-size: 16.0;" + "-fx-font-weight: bold;" + "-fx-border-style: solid;" + "-fx-border-width: 3;"+"-fx-border-color: rgb(65, 65, 65);"+"-fx-text-fill: white;" + "-fx-background-color: "+backgroundColor+";");
@@ -127,8 +130,16 @@ public class ViewBuilder{
 
         textField.textProperty().bindBidirectional(stringProperty);
         textField.disableProperty().bind(disableProperty);
+
+        //listeners desperately attempting to keep text fields in focus
         textField.focusedProperty().addListener((var1, var2, var3) -> {
             if(!disableProperty.get()){
+                textField.requestFocus();
+            }
+        });
+
+        model.getStatsVisibilityProperty().addListener((var1, var2, var3) -> {
+            if(!disableProperty.get() && !model.getStatsVisibility()){
                 textField.requestFocus();
             }
         });
@@ -166,7 +177,7 @@ public class ViewBuilder{
 
         //highlight current input line
         label.setBorder(new Border(new BorderStroke(Color.rgb(65, 65, 65), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4))));
-        disableProperty.addListener((var1, var2, var3) -> { label.setBorder(new Border(new BorderStroke(disableProperty.get() ? Color.rgb(65, 65, 65) : Color.GREEN, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4)))); });
+        disableProperty.addListener((var1, var2, var3) -> { label.setBorder(new Border(new BorderStroke(disableProperty.get() ? Color.rgb(65, 65, 65) : Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4)))); });
 
         //make less opaque when stats pane visible
         label.setOpacity(0.65);
@@ -235,7 +246,11 @@ public class ViewBuilder{
     //-------------BOTTOM---------------
     private Node createBottom(){
         VBox bottom = new VBox(10);
-        bottom.getChildren().addAll(createKeyboard(),createSubmit());
+        Button statsButton = createButton("STATS", showHideStats);
+        statsButton.disableProperty().bind(model.getStatsVisibilityProperty());
+        HBox buttonsHBox = new HBox(createSubmit(), statsButton);
+        buttonsHBox.setAlignment(Pos.CENTER);
+        bottom.getChildren().addAll(createKeyboard(), buttonsHBox);
         bottom.setAlignment(Pos.TOP_CENTER);
         return bottom;
     }
@@ -359,8 +374,9 @@ public class ViewBuilder{
             label2.textProperty().bind(model.getStats().winCountArrayPropertyAt(i-1).asString());
             //label2.translateXProperty().bind(Bindings.when(new SimpleBooleanProperty(model.getStats().winCountArrayPropertyAt(i-1).get() != 0)).then(-17).otherwise(0));
             label2.setStyle("-fx-font-family: serif;"+"-fx-font-size: 15;"+"-fx-text-fill: white;");
-            label2.setTranslateX(-3);
-            Rectangle rectangle = new Rectangle(0, 15, Color.rgb(1, 112, 66));
+            label2.setMinWidth(30);
+            label2.setTranslateX(-21);
+            Rectangle rectangle = new Rectangle(0, 20, Color.rgb(65, 65, 65));
             rectangle.widthProperty().bind(model.getStats().winArrayPropertyAt(i-1));
             HBox hbox = new HBox(label1, rectangle, label2);
             hbox.setSpacing(6);

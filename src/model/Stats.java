@@ -58,5 +58,5 @@ public class Stats {
     public void setWinCountArray(int index, int value) { winCountArray.get(index).set(value); }
     public void setWinArray(int index, int value) { winArray.get(index).set(value); }
 
-    public void updateWinArray() { for(int i = 0; i < 6; i++) setWinArray(i, winCount.get() == 0 ? 0 : winCountArrayAt(i) * 230 / winCount.get()); }
+    public void updateWinArray() { for(int i = 0; i < 6; i++) setWinArray(i, winCount.get() == 0 ? 20 : winCountArrayAt(i) * 230 / winCount.get() + 20); }
 }

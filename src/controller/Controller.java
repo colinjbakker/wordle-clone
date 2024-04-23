@@ -1,6 +1,6 @@
 package controller;
 
-import view.ViewBuilder;
+import view.View;
 import model.*;
 
 import java.util.ArrayList;
@@ -9,18 +9,18 @@ import javafx.scene.layout.Region;
 
 
 public class Controller{
-	private ViewBuilder viewBuilder;
+	private View view;
 	private Model model;
     private FileIO fileIO;
 
 	public Controller() {
 		this.model = new Model();
         this.fileIO = new FileIO();
-		viewBuilder = new ViewBuilder(model, this::submitGuess, this::changeHandler, this::newGame, this::loadGame);
+		view = new View(model, this::submitGuess, this::changeHandler, this::newGame, this::loadGame, this::showHideStats);
 	}
 
     public void prepWordFile(String userList, String completeList){ fileIO.scanFile(userList, completeList); }
-	public Region getView() { return viewBuilder.build(); }
+	public Region getView() { return view.build(); }
 
 	public void newGame(){
         model.reset();
@@ -67,6 +67,13 @@ public class Controller{
         }
         model.getStats().setWinPercent(model.getStats().getGameCount() == 0 ? "0%" : (100 * model.getStats().getWinCount()) / (model.getStats().getGameCount()) + "%"); 
         model.getStats().updateWinArray();
+    }
+
+    public void showHideStats(){
+        model.setStatsVisibility(!model.getStatsVisibility());
+        if(!checkWin(model.getShadow().guessAt(model.getGuessCount()).getGuessString())){
+            model.flipGameDisable();
+        }
     }
 
     private boolean checkWin(String guess){ return guess.equals(model.getSolution().toUpperCase()); }
